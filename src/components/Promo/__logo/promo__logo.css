@@ -1,0 +1,22 @@
+.promo__logo {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 768px) {
+  .promo__logo {
+    top: 49%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .promo__logo {
+    top: 47%;
+    width: 248px;
+    height: 248px;
+  }
+}

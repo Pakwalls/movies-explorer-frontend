@@ -1,0 +1,22 @@
+.about-project__articles {
+  margin: 4px 0 0 0;
+  padding: 0 0 110px 0;
+  display: flex;
+  gap: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-project__articles {
+    padding: 0 0 93px 0;
+    gap: 30px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .about-project__articles {
+    margin: 0;
+    flex-wrap: wrap;
+    gap: 56px;
+    padding: 0 0 60px 0;
+  }
+}

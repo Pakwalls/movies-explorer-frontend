@@ -1,0 +1,20 @@
+.about-me__avatar {
+  height: 327px;
+  width: 270px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .about-me__avatar {
+    height: 307px;
+    width: 255px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .about-me__avatar {
+    height: 352px;
+    width: 292px;
+  }
+}

@@ -1,0 +1,18 @@
+.about-project__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 17px;
+  min-height: 36px;
+  background-color: #F2F2F2;
+}
+
+@media screen and (max-width: 600px) {
+  .about-project__stage {
+    font-size: 11px;
+    line-height: 13px;
+  }
+}

@@ -1,0 +1,12 @@
+.form__plate {
+  padding: 40px 0 0 0;
+  width: 100%;
+  height: 100%;
+  max-width: 396px;
+}
+
+@media screen and (max-width: 600px) {
+  .form__plate {
+    padding: 80px 0 0 0;
+  }
+}

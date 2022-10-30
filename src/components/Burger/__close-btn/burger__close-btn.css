@@ -1,0 +1,21 @@
+.burger__close-btn {
+  display: none;
+  margin: 22px 22px 0 0;
+  padding: 0;
+  line-height: 0;
+  border: 0;
+  background-color: transparent;
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 768px) {
+  .burger__close-btn {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .burger__close-btn {
+    margin: 13px 13px 0 0;
+  }
+}

@@ -1,0 +1,15 @@
+.burger__open-btn {
+  display: none;
+  width: 43px;
+  height: 43px;
+  padding: 0;
+  line-height: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  .burger__open-btn {
+    display: flex;
+  }
+}

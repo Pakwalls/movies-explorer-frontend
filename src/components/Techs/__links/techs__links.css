@@ -1,0 +1,23 @@
+.techs__links {
+  margin: 0;
+  padding: 0 0 100px 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .techs__links {
+    padding: 0 0 90px 0;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .techs__links {
+    justify-content: flex-start;
+    padding: 0 10px 70px 10px;
+    max-width: 178px;
+  }
+}

@@ -1,0 +1,12 @@
+.profile__form {
+  padding: 108px 0 205px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .profile__form {
+    padding: 82px 0 195px 0;
+  }
+}

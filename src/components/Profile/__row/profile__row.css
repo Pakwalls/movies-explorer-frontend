@@ -1,0 +1,10 @@
+.profile__row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.profile__row:first-of-type {
+  border-bottom: 1px solid #E8E8E8;
+}

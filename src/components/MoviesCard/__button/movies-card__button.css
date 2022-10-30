@@ -1,0 +1,22 @@
+.movies-card__button {
+  margin: 18px 0 19px 0;
+  padding: 10px 0;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  font-size: 12px;
+  line-height: 11px;
+  text-align: center;
+  color: #000000;
+  border: 0;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .movies-card__button {
+    margin: 14px 0;
+  }
+}

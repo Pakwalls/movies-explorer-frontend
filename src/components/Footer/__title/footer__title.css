@@ -1,0 +1,17 @@
+.footer__title {
+  margin: 0;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  font-weight: 400;
+  color: #A0A0A0;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid #E8E8E8;
+}
+
+@media screen and (max-width: 600px) {
+  .footer__title {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

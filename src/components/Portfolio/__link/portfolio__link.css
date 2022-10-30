@@ -1,0 +1,8 @@
+.portfolio__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 0;
+  text-decoration: none;
+  color: #000;
+}

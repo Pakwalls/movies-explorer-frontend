@@ -1,0 +1,4 @@
+.burger__link_active {
+  text-underline-offset: 10px;
+  text-decoration: underline;
+}
