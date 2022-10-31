@@ -98,6 +98,7 @@
 
 @import url('./components/SavedMovies/savedMovies.css');
 
+@import url('./components/SearchForm/searchForm.css');
 @import url('./components/SearchForm/__btn/searchForm__btn.css');
 @import url('./components/SearchForm/__filter-title/searchForm__filter-title.css');
 @import url('./components/SearchForm/__filter/searchForm__filter.css');

@@ -28,7 +28,7 @@ function SearchForm({ filters, handleChangeFilters }) {
     <div className='searchForm'>
       <form className="searchForm__search-container">
         <img src={searchIcon} className="searchForm__icon" alt="иконка поиск" />
-        <input className="searchForm__input" placeholder='Фильм' value={searchValue} onChange={handleChangeSearchValue} />
+        <input className="searchForm__input" placeholder='Фильм' value={searchValue} onChange={handleChangeSearchValue} required/>
         <button type='submit' className="searchForm__btn hovered-item" onClick={handleClickSearch}>
           <img alt="иконка поиска" src={invertedSearchIcon} className="searchForm__img" />
         </button>

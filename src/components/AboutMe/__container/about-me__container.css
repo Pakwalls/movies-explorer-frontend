@@ -3,10 +3,12 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  gap: 15px;
 }
 
 @media screen and (max-width: 600px) {
   .about-me__container {
     flex-wrap: wrap-reverse;
+    gap: 0;
   }
 }

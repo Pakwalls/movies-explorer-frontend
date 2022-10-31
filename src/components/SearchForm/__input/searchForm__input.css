@@ -6,13 +6,7 @@
   text-align: center;
   color: #A0A0A0;
   border: none;
-  width: calc(100% - 300px);
-}
-
-@media screen and (max-width: 768px) {
-  .searchForm__input {
-    width: calc(100% - 218px);
-  }
+  width: calc(100% - 154px);
 }
 
 @media screen and (max-width: 600px) {
