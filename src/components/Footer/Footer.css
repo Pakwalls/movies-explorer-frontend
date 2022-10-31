@@ -15,6 +15,6 @@
   .footer {
     width: calc(100% - 28px);
     background-color: #FFF;
-    padding: 60px 14px 10px;
+    padding: 30px 14px 10px;
   }
 }
