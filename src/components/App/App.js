@@ -11,13 +11,14 @@ import Login from "../Login/Login.js";
 import Profile from "../Profile/Profile.js";
 import Movies from "../Movies/Movies.js";
 import SavedMovies from "../SavedMovies/SavedMovies.js";
-import Burger from "../Burger/Burger.js";
 import { useState } from "react";
 import NotFound from "../NotFound/NotFound.js";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 
 function App() {
+  // -------------------------------------------------------------------------------------------------------------------------- переменная стейта авторизации
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const history = useHistory();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function handleLogOut() {
     setIsLoggedIn(false)
@@ -37,49 +38,54 @@ function App() {
 
   return (
     <div className="app">
-    <div className='page'>
-      <Header 
-        isLoggedIn={isLoggedIn}
-      />
-      <Switch>
-        <Route path="/signup">
-          <Register
-            handleSubmit={handleSignUp}
+      <div className='page'>
+        <Header
+          isLoggedIn={isLoggedIn}
+        />
+        <Switch>
+          <ProtectedRoute
+            exact
+            path="/"
+            component={Main}
+            loggedIn={isLoggedIn}
           />
-        </Route>
 
-        <Route path="/signin">
-          <Login
-            handleSubmit={handleSignIn}
-          />
-        </Route>
-
-        <Route path="/profile">
-          <Profile
+          <ProtectedRoute
+            path="/profile"
+            component={Profile}
+            loggedIn={isLoggedIn}
             userName={'Вячеслав'}
             email={'pochta@ya.ru'}
             handleLogOut={handleLogOut}
           />
-        </Route>
 
-        <Route path="/movies">
-          <Movies />
-        </Route>
-
-        <Route path="/saved-movies">
-          <SavedMovies />
-        </Route>
-
-        <Route exact path="/">
-          <Main />
-          <Burger 
-            isLoggedIn={isLoggedIn}
+          <ProtectedRoute
+            path="/movies"
+            component={Movies}
+            loggedIn={isLoggedIn}
           />
-        </Route>
 
-        <Route path="*">
-          <NotFound />
-        </Route>
+          <ProtectedRoute
+            path="/saved-movies"
+            component={SavedMovies}
+            loggedIn={isLoggedIn}
+          />
+
+          <Route path="/signup">
+            <Register
+              handleSubmit={handleSignUp}
+            />
+          </Route>
+
+          <Route path="/signin">
+            <Login
+              handleSubmit={handleSignIn}
+            />
+          </Route>
+
+          <Route path="*">
+            <NotFound />
+          </Route>
         </Switch>
         <Footer />
       </div>

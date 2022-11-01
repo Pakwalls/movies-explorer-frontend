@@ -4,7 +4,7 @@ import AccountBtn from "../AccountBtn/AccountBtn";
 import burgerLogo from '../../images/burger-logo.svg'
 import burgerCloseLogo from '../../images/burger-close-logo.svg'
 
-function Burger({ isLoggedIn }) {
+function Burger({ LoggedIn }) {
 const [isOpen, setIsOpen] = useState(false);
 
 function handleClick() {
@@ -14,7 +14,7 @@ function handleClick() {
   return (
     <>
       {!isOpen?
-        <button type='button' className={`burger__${isLoggedIn ? "open-btn" : "hidden-btn"}`} onClick={handleClick}>
+        <button type='button' className={`burger__${LoggedIn ? "open-btn" : "hidden-btn"}`} onClick={handleClick}>
           <img alt='логотип бургера' src={burgerLogo}/>
         </button>
         : 

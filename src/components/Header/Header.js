@@ -2,7 +2,6 @@ import { Link, Route } from 'react-router-dom';
 import AccountBtn from '../AccountBtn/AccountBtn.js';
 import Burger from '../Burger/Burger.js';
 import Logo from '../Logo/Logo.js'
-
 import Navigation from '../Navigation/Navigation.js';
 
 function Header({ isLoggedIn }) {
