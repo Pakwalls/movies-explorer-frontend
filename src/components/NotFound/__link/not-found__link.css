@@ -1,0 +1,25 @@
+.not-found__link {
+  margin: 0;
+  font-size: 14px;
+  line-height: 17px;
+  color: #2BE080;
+  text-decoration: none;
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  transform: translate(-50%, 0);
+}
+
+@media screen and (max-width: 768px) {
+  .not-found__link {
+    bottom: 222px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .not-found__link {
+    font-size: 12px;
+    line-height: 15px;
+    bottom: 32px;
+  }
+}

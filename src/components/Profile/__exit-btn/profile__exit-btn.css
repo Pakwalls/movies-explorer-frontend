@@ -1,0 +1,16 @@
+.profile__exit-btn {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #EE3465;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .profile__exit-btn {
+    padding: 0 0 40px 0;
+  }
+}

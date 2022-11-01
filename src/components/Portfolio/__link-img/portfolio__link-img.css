@@ -1,0 +1,13 @@
+.portfolio__link-img {
+  width: 17px;
+  height: 18px;
+  object-fit: contain;
+}
+
+@media screen and (max-width: 600px) {
+  .portfolio__link-img {
+    padding: 0 5px 0 0;
+    width: 11px;
+    height: 11px;
+  }
+}

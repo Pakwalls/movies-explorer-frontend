@@ -1,0 +1,25 @@
+.header__login-btn {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 16px;
+  width: 76px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2BE080;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
+@media screen and (max-width: 320px) {
+  .header__login-btn {
+    width: 54px;
+    height: 26px;
+    font-size: 10px;
+  }
+}

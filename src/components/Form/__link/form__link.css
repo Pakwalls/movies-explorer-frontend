@@ -1,0 +1,14 @@
+.form__link {
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  color: #2BE080;
+  padding: 0 0 0 3px;
+}
+
+@media screen and (max-width: 600px) {
+  .form__link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

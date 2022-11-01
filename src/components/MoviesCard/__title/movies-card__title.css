@@ -1,0 +1,14 @@
+.movies-card__title {
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+@media screen and (max-width: 600px) {
+  .movies-card__title {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}

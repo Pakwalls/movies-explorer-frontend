@@ -1,0 +1,7 @@
+.burger__nav {
+  padding: 0;
+  margin: 74px 0 619px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

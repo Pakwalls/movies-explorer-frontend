@@ -1,0 +1,14 @@
+.header__user-tab {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+@media screen and (max-width: 320px) {
+  .header__user-tab {
+    gap: 15px;
+  }
+}

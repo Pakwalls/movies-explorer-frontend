@@ -1,0 +1,11 @@
+.movies__load-bnt {
+  width: 320px;
+  height: 36px;
+  background-color: #F9F9F9;
+  border: 0;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  cursor: pointer;
+}

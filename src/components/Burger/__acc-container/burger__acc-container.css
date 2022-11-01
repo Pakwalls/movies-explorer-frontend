@@ -1,0 +1,18 @@
+.burger__acc-container {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+@media screen and (max-width: 768px) {
+  .burger__acc-container .account-btn {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .burger__acc-container {
+    bottom: 64px;
+  }
+}

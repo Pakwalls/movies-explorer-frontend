@@ -1,0 +1,18 @@
+.about-project {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 110px 70px 0 70px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-project {
+    padding: 90px 50px 0 50px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .about-project {
+    padding: 70px 18px 0 18px;
+  }
+}

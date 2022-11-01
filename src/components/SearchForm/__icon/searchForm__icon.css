@@ -1,0 +1,9 @@
+.searchForm__icon {
+  margin: 0 40px 0 6px;
+}
+
+@media screen and (max-width: 600px) {
+  .searchForm__icon {
+    display: none;
+  }
+}

@@ -1,0 +1,23 @@
+.about-project__description {
+  margin: 0;
+  padding: 26px 0 0 0;
+  max-width: 550px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-project__description {
+    padding: 22px 0 0 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .about-project__description {
+    padding: 16px 0 0 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+}
