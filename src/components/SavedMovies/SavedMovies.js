@@ -23,7 +23,7 @@ function SavedMovies() {
   }
 
   return (
-    <section className="savedMovies">
+    <section className="saved-movies">
       <SearchForm filters={filters} handleChangeFilters={handleChangeFilters} />
       <MoviesCardList cardItems={cards} />
     </section>

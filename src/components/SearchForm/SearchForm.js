@@ -25,20 +25,20 @@ function SearchForm({ filters, handleChangeFilters }) {
   }
   
   return (
-    <div className='searchForm'>
-      <form className="searchForm__search-container">
-        <img src={searchIcon} className="searchForm__icon" alt="иконка поиск" />
-        <input className="searchForm__input" placeholder='Фильм' value={searchValue} onChange={handleChangeSearchValue} required/>
-        <button type='submit' className="searchForm__btn hovered-item" onClick={handleClickSearch}>
-          <img alt="иконка поиска" src={invertedSearchIcon} className="searchForm__img" />
+    <div className='search-form'>
+      <form className="search-form__search-container">
+        <img src={searchIcon} className="search-form__icon" alt="иконка поиск" />
+        <input className="search-form__input" placeholder='Фильм' value={searchValue} onChange={handleChangeSearchValue} required/>
+        <button type='submit' className="search-form__btn hovered-item" onClick={handleClickSearch}>
+          <img alt="иконка поиска" src={invertedSearchIcon} className="search-form__img" />
         </button>
       </form>
-      <div className="searchForm__toggle-container">
-        <label className="searchForm__switch" >
+      <div className="search-form__toggle-container">
+        <label className="search-form__switch" >
           <input type="checkbox" value={filters.isShorts} onClick={handleChangeToggleBtn} />
-          <span className="searchForm__slider"></span>
+          <span className="search-form__slider"></span>
         </label>
-        <p className="searchForm__filter-title">Короткометражки</p>
+        <p className="search-form__filter-title">Короткометражки</p>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-.searchForm__search-container {
+.search-form__search-container {
   margin: 70px 0 0 0;
   padding: 0 0 14px 0;
   display: flex;
@@ -8,14 +8,14 @@
 }
 
 @media screen and (max-width: 768px) {
-  .searchForm__search-container {
+  .search-form__search-container {
     width: calc(100% - 60px);
     margin: 86px 0 0 0;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .searchForm__search-container {
+  .search-form__search-container {
     margin: 92px 0 0 0;
     padding: 0 0 9px;
     width: calc(100% - 28px);
