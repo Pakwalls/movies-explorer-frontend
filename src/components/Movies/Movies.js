@@ -1,57 +1,81 @@
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
-import { useState } from "react";
-import { CARD_ITEMS } from "../../utils/constants";
+import { useState, useEffect } from "react";
 import Preloader from 'preloader';
-// import { getMoviesData } from '../../utils/MoviesApi';
+import { getMoviesData } from '../../utils/MoviesApi';
+import { saveMoviesToStorage, getLocalStorageValue } from '../../utils/localStorageHandlers';
+import { loadNextIems } from '../../utils/pagginator';
 
 function Movies() {
   const [filters, setFilters] = useState({
     search: '',
     isShorts: false,
   })
+  const localMovies = getLocalStorageValue('movies');
+  const pagginator = 12
   const [page, setPage] = useState(1);
+  const [isTouched, setIsTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [cards, setCards] = useState(CARD_ITEMS.slice(0, 12));
+  const [cards, setCards] = useState([]);
+  const [showNextBtn, setShowNextBtn] = useState(false);
 
-  // const [mainCards, setmainCards] = useState(() => {
-  //   getMoviesData()
-  //     .then((data) => {
-  //       setmainCards(data.slice(0, 12));
-  //     })
-  //     .catch((err) => console.error(err))
-  // });
+  const [mainCards, setMainCards] = useState([]);
 
   const handleChangeFilters = (newFilterState) => {
-    // console.log(mainCards);
-    setIsLoading(true)
-    setPage(1)
+    if (!isTouched) {
+      setIsTouched(true)
+    }
+    if (localMovies.length === 0) {
+      getMoviesData()
+        .then((data) => {
+          saveMoviesToStorage(data);
+        })
+        .catch((err) => console.error(err))
+    }
+
     setFilters(newFilterState)
-    const filteredCards = CARD_ITEMS.filter(card => {
-      const searchCondition = !!card.cardTitle.toLowerCase().match(newFilterState.search.toLowerCase())
-      if (newFilterState.isShorts) {
-        return searchCondition && card.isShort
-      }
-      return searchCondition
-    })
-    setCards(filteredCards.slice(0, 12))
-    setIsLoading(false)
+    setPage(1)
   }
+
+
 
   const handleLoadMore = () => {
-    setIsLoading(true)
     setPage(page + 1)
-    const filteredCards = CARD_ITEMS.filter(card => {
-      const searchCondition = !!card.cardTitle.toLowerCase().match(filters.search.toLowerCase())
-      if (filters.isShorts) {
-        return searchCondition && card.isShort
-      }
-      return searchCondition
-    }).slice(12 * page, 12 * (page + 1))
-    setCards([...cards, ...filteredCards])
-    setIsLoading(false)
   }
 
+  useEffect(() => {
+    if (isTouched) {
+      const values = getLocalStorageValue('movies');
+
+      const filteredCards = values.filter(card => {
+        const searchCondition = !!card.nameRU.toLowerCase().match(filters.search.toLowerCase())
+        if (filters.isShorts) {
+          return searchCondition && card.isShort
+        }
+        return searchCondition
+      })
+      setMainCards(filteredCards)
+
+      if (pagginator < filteredCards.length) {
+        setShowNextBtn(true)
+      } else {
+        setShowNextBtn(false)
+      }
+      setCards(filteredCards.slice(0, pagginator))
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    if (isTouched && page !== 1) {
+      const nextData = loadNextIems(pagginator, mainCards, cards.length, filters)
+      setShowNextBtn(nextData.isHaveNext)
+
+      setCards([...cards, ...nextData.nextItems])
+    }
+  }, [page])
+
+  useEffect(() => {
+  }, [cards])
   return (
     <section className="movies">
       <SearchForm filters={filters} handleChangeFilters={handleChangeFilters} />
@@ -59,7 +83,7 @@ function Movies() {
       <div className="movies__load-container">
         {isLoading
           ? <Preloader />
-          : <button type='button' className="movies__load-bnt hovered-item" onClick={handleLoadMore}>Ещё</button>
+          : showNextBtn && <button type='button' className="movies__load-bnt hovered-item" onClick={handleLoadMore}>Ещё</button>
         }
       </div>
     </section>

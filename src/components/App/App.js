@@ -36,7 +36,7 @@ function App() {
       getUserData(jwt)
         .then((res) => {
           setIsLoggedIn(true);
-          history.push('/');
+          history.push('/movies');
         })
         .catch(err => console.log(err))
     }
@@ -46,7 +46,7 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser({});
     localStorage.removeItem('jwt');
-    history.push('/signin');
+    history.push('/');
   }
 
   const handleRegistration = (data) => {
@@ -77,13 +77,6 @@ function App() {
           />
           <Switch>
             <ProtectedRoute
-              exact
-              path="/"
-              component={Main}
-              loggedIn={isLoggedIn}
-            />
-
-            <ProtectedRoute
               path="/profile"
               component={Profile}
               loggedIn={isLoggedIn}
@@ -113,6 +106,12 @@ function App() {
             <Route path="/signin">
               <Login
                 onLogin={handleAuthorization}
+              />
+            </Route>
+
+            <Route path="/">
+              <Main
+                loggedIn={isLoggedIn}
               />
             </Route>
 

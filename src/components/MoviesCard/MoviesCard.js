@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import deleteIcon from '../../images/delete-icon.svg';
 import savedIcon from '../../images/saved-icon.svg';
+import { IMAGE_LINK } from "../../utils/constants";
+
 
 function MoviesCard({ cardTitle, duration, image, saved }) {
   const currentLocation = useHistory().location.pathname;
@@ -11,14 +13,15 @@ function MoviesCard({ cardTitle, duration, image, saved }) {
   const handleSaveMovie = () => {
     setIsSavedMovie(!isSavedMovie);
   }
+  const movieImage = `${IMAGE_LINK}${image}`
 
   return (
     <li className="movies-card">
-      <div className="movies-card__info">
+      <div className="movies-card__info" title={cardTitle}>
         <h2 className="movies-card__title">{cardTitle}</h2>
-        <p className="movies-card__duration">{duration}</p>
+        <p className="movies-card__duration">{`${duration} минут`}</p>
       </div>
-      <img src={image} alt={cardTitle} className="movies-card__poster" />
+      <img src={movieImage} alt={cardTitle} className="movies-card__poster" />
       {currentLocation === "/movies" &&
         <button
           type="button"

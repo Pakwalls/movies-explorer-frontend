@@ -1,4 +1,4 @@
-const MOVIE_URL = 'https://api.nomoreparties.co/beatfilm-movies';
+import { MOVIE_URL } from "./constants";
 
 const checkResponse = (res) => {
   if (res.ok) {

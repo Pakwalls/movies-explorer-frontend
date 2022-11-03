@@ -6,9 +6,9 @@ function MoviesCardList({ cardItems, children }) {
     <ul className="movies-card-list">
       {cardItems.map(card => {
         return <MoviesCard
-          cardTitle={card.cardTitle}
+          cardTitle={card.nameRU}
           duration={card.duration}
-          image={card.imageUrl}
+          image={card.image.url}
           key={card.id}
           saved={card.saved}
         />

@@ -1,3 +1,7 @@
+export const IMAGE_LINK ='https://api.nomoreparties.co';
+export const MOVIE_URL = 'https://api.nomoreparties.co/beatfilm-movies';
+export const DATABASE_URL = 'https://api.diproject.nomoredomains.icu';
+
 export const CARD_ITEMS =
   [
     {

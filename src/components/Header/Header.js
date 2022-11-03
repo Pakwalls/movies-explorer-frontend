@@ -16,7 +16,7 @@ function Header({ isLoggedIn }) {
           <Navigation />
           <AccountBtn />
           <Burger
-            isLoggedIn={isLoggedIn}
+            loggedIn={isLoggedIn}
           />
         </>
         :

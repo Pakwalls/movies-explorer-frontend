@@ -1,4 +1,4 @@
-const DATABASE_URL = 'https://api.diproject.nomoredomains.icu';
+import { DATABASE_URL } from "./constants";
 
 const checkResponse = (res) => {
   if (res.ok) {
