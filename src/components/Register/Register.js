@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Form from "../Form/Form";
 import Logo from '../Logo/Logo.js'
 
-function Register({ handleSubmit }) {
+function Register({ onRegister }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +28,11 @@ function Register({ handleSubmit }) {
       ...errors,
       [name]: e.target.validationMessage || '',
     })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onRegister(formData);
   }
 
   return (

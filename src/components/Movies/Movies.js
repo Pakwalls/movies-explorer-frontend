@@ -3,6 +3,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import { useState } from "react";
 import { CARD_ITEMS } from "../../utils/constants";
 import Preloader from 'preloader';
+// import { getMoviesData } from '../../utils/MoviesApi';
 
 function Movies() {
   const [filters, setFilters] = useState({
@@ -13,7 +14,16 @@ function Movies() {
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState(CARD_ITEMS.slice(0, 12));
 
+  // const [mainCards, setmainCards] = useState(() => {
+  //   getMoviesData()
+  //     .then((data) => {
+  //       setmainCards(data.slice(0, 12));
+  //     })
+  //     .catch((err) => console.error(err))
+  // });
+
   const handleChangeFilters = (newFilterState) => {
+    // console.log(mainCards);
     setIsLoading(true)
     setPage(1)
     setFilters(newFilterState)

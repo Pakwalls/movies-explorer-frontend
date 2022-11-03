@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Form from "../Form/Form";
 import Logo from '../Logo/Logo.js'
 
-function Login({ handleSubmit }) {
+function Login({ onLogin }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,6 +26,11 @@ function Login({ handleSubmit }) {
       ...errors,
       [name]: e.target.validationMessage || '',
     })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin(formData);
   }
 
   return (
