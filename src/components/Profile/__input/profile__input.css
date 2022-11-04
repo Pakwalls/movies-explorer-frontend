@@ -13,3 +13,8 @@
   background-color: #fff;
 }
 
+@media screen and (max-width: 500px) {
+  .profile__input {
+    width: 260px;
+  }
+}

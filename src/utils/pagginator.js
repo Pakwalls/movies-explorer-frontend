@@ -9,7 +9,6 @@
  * @returns {Object} Возвращается обьект с ключами isHaveNext - есть ли еще карточки для загрузки, и nextItems - следующие карточки
 */
 export const loadNextIems = (limit, data, currentDataLength, filters) => {
-  console.log({ limit, data, currentDataLength, filters });
   const filteredCards = data.filter(card => {
     const searchCondition = !!card.nameRU.toLowerCase().match(filters.search.toLowerCase())
     if (filters.isShorts) {

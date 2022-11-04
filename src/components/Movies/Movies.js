@@ -5,42 +5,47 @@ import Preloader from 'preloader';
 import { getMoviesData } from '../../utils/MoviesApi';
 import { saveMoviesToStorage, getLocalStorageValue } from '../../utils/localStorageHandlers';
 import { loadNextIems } from '../../utils/pagginator';
+import { useListenWindowSize } from '../../utils/windowSizeHandlers'
+import { setAppSizing } from '../../utils/appSizeHandler';
 
 function Movies() {
+  const localMovies = getLocalStorageValue('movies');
+  const appSize = useListenWindowSize();
+
   const [filters, setFilters] = useState({
     search: '',
     isShorts: false,
   })
-  const localMovies = getLocalStorageValue('movies');
-  const pagginator = 12
+  const [initCount, setInitCount] = useState(12);
+  const [pagginator, setPagginator] = useState(3);
   const [page, setPage] = useState(1);
   const [isTouched, setIsTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
   const [showNextBtn, setShowNextBtn] = useState(false);
-
   const [mainCards, setMainCards] = useState([]);
 
   const handleChangeFilters = (newFilterState) => {
     if (!isTouched) {
       setIsTouched(true)
     }
+
     if (localMovies.length === 0) {
       getMoviesData()
         .then((data) => {
           saveMoviesToStorage(data);
         })
-        .catch((err) => console.error(err))
+        .catch((err) => console.error(err.message))
     }
+    setAppSizing(appSize, setInitCount, setPagginator);
 
     setFilters(newFilterState)
     setPage(1)
   }
 
-
-
   const handleLoadMore = () => {
-    setPage(page + 1)
+    setPage(page + 1);
+    setAppSizing(appSize, setInitCount, setPagginator);
   }
 
   useEffect(() => {
@@ -54,16 +59,18 @@ function Movies() {
         }
         return searchCondition
       })
+
       setMainCards(filteredCards)
 
-      if (pagginator < filteredCards.length) {
+      if (initCount < filteredCards.length) {
         setShowNextBtn(true)
       } else {
         setShowNextBtn(false)
       }
-      setCards(filteredCards.slice(0, pagginator))
+      setCards(filteredCards.slice(0, initCount))
     }
-  }, [filters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, appSize]);
 
   useEffect(() => {
     if (isTouched && page !== 1) {
@@ -72,10 +79,9 @@ function Movies() {
 
       setCards([...cards, ...nextData.nextItems])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
-  useEffect(() => {
-  }, [cards])
   return (
     <section className="movies">
       <SearchForm filters={filters} handleChangeFilters={handleChangeFilters} />

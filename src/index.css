@@ -87,10 +87,12 @@
 @import url('./components/Profile/__form/profile__form.css');
 @import url('./components/Profile/__confirm-btn/profile__confirm-btn.css');
 @import url('./components/Profile/__exit-btn/profile__exit-btn.css');
+@import url('./components/Profile/__exit-btn/_disabled/profile__exit-btn_disabled.css');
 @import url('./components/Profile/__label/profile__label.css');
 @import url('./components/Profile/__row/profile__row.css');
 @import url('./components/Profile/__input/profile__input.css');
 @import url('./components/Profile/__title/profile__title.css');
+@import url('./components/Profile/__save-btn/profile__save-btn.css');
 
 @import url('./components/Movies/movies.css');
 @import url('./components/Movies/__load-container/movies__load-container.css');

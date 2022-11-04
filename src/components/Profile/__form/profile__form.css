@@ -10,3 +10,9 @@
     padding: 82px 0 195px 0;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .profile__form {
+    padding: 60px 0 280px 0;
+  }
+}

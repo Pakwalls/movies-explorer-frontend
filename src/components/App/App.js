@@ -36,6 +36,7 @@ function App() {
       getUserData(jwt)
         .then((res) => {
           setIsLoggedIn(true);
+          setCurrentUser(res);
           history.push('/movies');
         })
         .catch(err => console.log(err))
@@ -54,7 +55,7 @@ function App() {
       .then((res) => {
         history.push('/signin');
       })
-      .catch((err) => console.error(err))
+      .catch((err) => console.error(err.message))
   };
 
   const handleAuthorization = (data) => {
@@ -62,10 +63,10 @@ function App() {
       .then((res) => {
         localStorage.setItem('jwt', res.token);
         setIsLoggedIn(true);
-        updateToken(res.token)
+        updateToken(res.token);
         history.push('/movies');
       })
-      .catch((err) => console.error(err))
+      .catch((err) => console.error(err.message))
   }
 
   return (
@@ -80,9 +81,9 @@ function App() {
               path="/profile"
               component={Profile}
               loggedIn={isLoggedIn}
-              userName={'Вячеслав'}
-              email={'pochta@ya.ru'}
+              user={currentUser}
               handleLogOut={handleLogOut}
+              onUpdateUser={setCurrentUser}
             />
 
             <ProtectedRoute

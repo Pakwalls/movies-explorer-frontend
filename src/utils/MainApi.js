@@ -5,7 +5,12 @@ const checkResponse = (res) => {
     return res.json();
   }
   return res.json()
-    .then((data) => { return Promise.reject(`Получена ошибка, код: ${res.status}, описание: ${data.message}`) });
+    .then((data) => {
+      return Promise.reject({
+        message: `Получена ошибка, код: ${res.status}, описание: ${data.message}`,
+        status: res.status
+      })
+    })
 };
 
 const headers = {
@@ -57,6 +62,7 @@ export const getUserData = (token) => {
 export const updateUserData = (name, email) => {
   return fetch(`${DATABASE_URL}/users/me`, {
     method: 'PATCH',
+    headers,
     body: JSON.stringify(
       {
         name,
