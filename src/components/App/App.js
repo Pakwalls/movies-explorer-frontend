@@ -1,12 +1,8 @@
-import {
-  Switch,
-  Route,
-  useHistory,
-} from "react-router-dom";
-import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
-import Header from '../Header/Header.js';
-import Main from '../Main/Main.js';
-import Footer from '../Footer/Footer.js';
+import { Switch, Route, useHistory } from "react-router-dom";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
+import Header from "../Header/Header.js";
+import Main from "../Main/Main.js";
+import Footer from "../Footer/Footer.js";
 import Register from "../Register/Register.js";
 import Login from "../Login/Login.js";
 import Profile from "../Profile/Profile.js";
@@ -15,7 +11,12 @@ import SavedMovies from "../SavedMovies/SavedMovies.js";
 import { useState } from "react";
 import NotFound from "../NotFound/NotFound.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
-import { authorizeUser, createUser, getUserData, updateToken } from "../../utils/MainApi.js";
+import {
+  authorizeUser,
+  createUser,
+  getUserData,
+  updateToken,
+} from "../../utils/MainApi.js";
 import { useEffect } from "react";
 import { ERRORS } from "../../utils/constants.js";
 
@@ -23,7 +24,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
   const [currentUser, setCurrentUser] = useState({});
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
 
   useEffect(() => {
     tokenCheck();
@@ -31,7 +32,7 @@ function App() {
   }, [isLoggedIn]);
 
   const tokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem("jwt");
 
     if (jwt) {
       updateToken(jwt);
@@ -39,65 +40,62 @@ function App() {
         .then((res) => {
           setIsLoggedIn(true);
           setCurrentUser(res);
-          history.push('/movies');
+          history.push("/movies");
         })
-        .catch(err => console.error(err))
+        .catch((err) => console.error(err));
     }
-  }
+  };
 
   const handleLogOut = () => {
     setIsLoggedIn(false);
     setCurrentUser({});
-    localStorage.removeItem('jwt');
-    history.push('/');
-  }
+    localStorage.removeItem("jwt");
+    history.push("/");
+  };
 
   const handleRegistration = (data) => {
     return createUser(data)
       .then((res) => {
-        history.push('/signin');
+        history.push("/signin");
       })
       .catch((err) => {
-        console.error(err.message)
+        console.error(err.message);
         if (err.status === 400) {
-          setApiError(ERRORS.REGISTER.SERVER_ERROR)
+          setApiError(ERRORS.REGISTER.SERVER_ERROR);
         } else if (err.status === 409) {
-          setApiError(ERRORS.EMAIL_EXIST_ERROR)
+          setApiError(ERRORS.EMAIL_EXIST_ERROR);
         } else {
-          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR)
+          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
         }
-      })
+      });
   };
 
   const handleAuthorization = (data) => {
     return authorizeUser(data)
       .then((res) => {
-        localStorage.setItem('jwt', res.token);
+        localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
         updateToken(res.token);
-        history.push('/movies');
-        setApiError('')
-
+        history.push("/movies");
+        setApiError("");
       })
       .catch((err) => {
-        console.error(err)
+        console.error(err);
         if (err.status === 400) {
-          setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR)
+          setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR);
         } else if (err.status === 409) {
-          setApiError(ERRORS.LOGIN.TOKEN_ERROR)
+          setApiError(ERRORS.LOGIN.TOKEN_ERROR);
         } else {
-          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR)
+          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
         }
-      })
+      });
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
-        <div className='page'>
-          <Header
-            isLoggedIn={isLoggedIn}
-          />
+        <div className="page">
+          <Header isLoggedIn={isLoggedIn} />
           <Switch>
             <ProtectedRoute
               path="/profile"
@@ -122,23 +120,15 @@ function App() {
             />
 
             <Route path="/signup">
-              <Register
-                apiError={apiError}
-                onRegister={handleRegistration}
-              />
+              <Register apiError={apiError} onRegister={handleRegistration} />
             </Route>
 
             <Route path="/signin">
-              <Login
-                apiError={apiError}
-                onLogin={handleAuthorization}
-              />
+              <Login apiError={apiError} onLogin={handleAuthorization} />
             </Route>
 
             <Route path="/">
-              <Main
-                loggedIn={isLoggedIn}
-              />
+              <Main loggedIn={isLoggedIn} />
             </Route>
 
             <Route path="*">

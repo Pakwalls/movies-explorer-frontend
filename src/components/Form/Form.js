@@ -1,10 +1,20 @@
-function Form({ formData, handleChange, handleSubmit, errors, btnText, apiError, isLogin = false }) {
+function Form({
+  formData,
+  handleChange,
+  handleSubmit,
+  errors,
+  btnText,
+  apiError,
+  isLogin = false,
+}) {
   return (
     <form className="form__plate" onSubmit={handleSubmit}>
       <fieldset className="form__fieldset">
-        {!isLogin &&
+        {!isLogin && (
           <>
-            <label htmlFor="form__name" className="form__label">Имя</label>
+            <label htmlFor="form__name" className="form__label">
+              Имя
+            </label>
             <input
               value={formData.name}
               onChange={handleChange}
@@ -18,8 +28,11 @@ function Form({ formData, handleChange, handleSubmit, errors, btnText, apiError,
               required
             />
             <span className="form__error">{errors.name}</span>
-          </>}
-        <label htmlFor="email" className="form__label">E-mail</label>
+          </>
+        )}
+        <label htmlFor="email" className="form__label">
+          E-mail
+        </label>
         <input
           value={formData.email}
           onChange={handleChange}
@@ -31,7 +44,9 @@ function Form({ formData, handleChange, handleSubmit, errors, btnText, apiError,
           required
         />
         <span className="form__error">{errors.email}</span>
-        <label htmlFor="password" className="form__label">Пароль</label>
+        <label htmlFor="password" className="form__label">
+          Пароль
+        </label>
         <input
           value={formData.password}
           onChange={handleChange}
@@ -45,9 +60,11 @@ function Form({ formData, handleChange, handleSubmit, errors, btnText, apiError,
         <span className="form__error">{errors.password}</span>
       </fieldset>
       <span className="input-error">{apiError}</span>
-      <button type="submit" className="form__submit-button hovered-item">{btnText}</button>
+      <button type="submit" className="form__submit-button hovered-item">
+        {btnText}
+      </button>
     </form>
-  )
-};
+  );
+}
 
 export default Form;

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import deleteIcon from '../../images/delete-icon.svg';
-import savedIcon from '../../images/saved-icon.svg';
-import { saveSavedMoviesToStorage, getLocalStorageValue } from "../../utils/localStorageHandlers";
+import deleteIcon from "../../images/delete-icon.svg";
+import savedIcon from "../../images/saved-icon.svg";
+import {
+  saveSavedMoviesToStorage,
+  getLocalStorageValue,
+} from "../../utils/localStorageHandlers";
 import { createMovieCard, deleteMovieCard } from "../../utils/MainApi";
 
 function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
@@ -14,63 +17,62 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
 
   const handleSaveMovie = () => {
     if (!isLoading) {
-      setIsTouched(true)
+      setIsTouched(true);
       setIsSavedMovie(!isSavedMovie);
-      setIsLoading(true)
+      setIsLoading(true);
     }
-  }
+  };
 
   const deleteAction = () => {
     deleteMovieCard(cardData._id)
       .then(() => {
-        const savedMovies = getLocalStorageValue('savedMovies');
+        const savedMovies = getLocalStorageValue("savedMovies");
         if (savedMovies) {
-          const deletedItemIndex = savedMovies.findIndex((({ _id }) => _id === cardData._id))
+          const deletedItemIndex = savedMovies.findIndex(
+            ({ _id }) => _id === cardData._id,
+          );
           if (deletedItemIndex !== -1) {
             savedMovies.splice(deletedItemIndex, 1);
             saveSavedMoviesToStorage(savedMovies);
           }
         }
         if (!isSavedMovie) {
-          delete cardData['owner']
-          delete cardData['_id']
-          delete cardData['__v']
+          delete cardData["owner"];
+          delete cardData["_id"];
+          delete cardData["__v"];
         }
-        handleChangeCard(cardData)
+        handleChangeCard(cardData);
       })
-      .catch(err => console.error(err))
+      .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   const addAction = () => {
     createMovieCard(cardData)
       .then((data) => {
-        const savedMovies = getLocalStorageValue('savedMovies');
-        const newData = { ...data }
+        const savedMovies = getLocalStorageValue("savedMovies");
+        const newData = { ...data };
         if (savedMovies) {
           savedMovies.push(data);
           saveSavedMoviesToStorage(savedMovies);
         }
-        handleChangeCard(newData)
+        handleChangeCard(newData);
       })
-      .catch(err => console.error(err))
+      .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   useEffect(() => {
     if (isTouched) {
       if (!isSavedMovie || isSavedPage) {
-        deleteAction()
+        deleteAction();
       } else {
-        addAction()
+        addAction();
       }
     }
-    setIsTouched(false)
+    setIsTouched(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTouched])
-
-
-
+  }, [isTouched]);
 
   return (
     <li className="movies-card">
@@ -78,25 +80,33 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
         <h2 className="movies-card__title">{cardData.nameRU}</h2>
         <p className="movies-card__duration">{`${cardData.duration} минут`}</p>
       </div>
-      <img src={cardData.image} alt={cardData.nameRU} className="movies-card__poster" />
-      {currentLocation === "/movies" &&
+      <img
+        src={cardData.image}
+        alt={cardData.nameRU}
+        className="movies-card__poster"
+      />
+      {currentLocation === "/movies" && (
         <button
           type="button"
-          className={`movies-card__button${isSavedMovie ? ' movies-card__pressed-button' : ''} hovered-item`}
+          className={`movies-card__button${
+            isSavedMovie ? " movies-card__pressed-button" : ""
+          } hovered-item`}
           onClick={handleSaveMovie}
         >
-          {isSavedMovie
-            ? <img alt='галочка' src={savedIcon} />
-            : "Сохранить"}
-        </button>}
-      {currentLocation === "/saved-movies"
-        && <button type="button" className="movies-card__button hovered-item"
+          {isSavedMovie ? <img alt="галочка" src={savedIcon} /> : "Сохранить"}
+        </button>
+      )}
+      {currentLocation === "/saved-movies" && (
+        <button
+          type="button"
+          className="movies-card__button hovered-item"
           onClick={handleSaveMovie}
         >
-          <img alt='крестик' src={deleteIcon} />
-        </button>}
+          <img alt="крестик" src={deleteIcon} />
+        </button>
+      )}
     </li>
-  )
+  );
 }
 
 export default MoviesCard;

@@ -15,4 +15,4 @@ export const isEqual = (object1, object2) => {
   }
 
   return true;
-}
+};

@@ -3,13 +3,12 @@ import { isEqual } from "../../utils/isEqual";
 import { ERRORS } from "../../utils/constants";
 import { updateUserData } from "../../utils/MainApi";
 
-
 function Profile({ user, handleLogOut, onUpdateUser }) {
-  const [btnText, setBtnText] = useState('Редактировать');
+  const [btnText, setBtnText] = useState("Редактировать");
   const [isTouched, setIsTouched] = useState(false);
   const [isEqualFormData, setIsEqualFormData] = useState(true);
   const [formData, setFormData] = useState(user);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   /*
     Формдата для изменения и хранения информации о пользователе
@@ -19,43 +18,40 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
   */
 
   const handleChangeFormData = (e) => {
-    setIsTouched(true)
+    setIsTouched(true);
     const { name, value, validationMessage } = e.target;
 
     setFormData({
       ...formData,
       [name]: value,
-    })
-    setError(validationMessage)
-  }
+    });
+    setError(validationMessage);
+  };
 
   const handleSubmitForm = (e) => {
     updateUserData(formData.name, formData.email)
-      .then(data => {
+      .then((data) => {
         setFormData(data);
         onUpdateUser(data);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.status === 409) {
-          setError(ERRORS.EMAIL_EXIST_ERROR)
+          setError(ERRORS.EMAIL_EXIST_ERROR);
         } else {
-          setError(ERRORS.PROFILE.SERVER_ERROR)
+          setError(ERRORS.PROFILE.SERVER_ERROR);
         }
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     if (isTouched) {
-      setIsEqualFormData(isEqual(formData, user))
+      setIsEqualFormData(isEqual(formData, user));
     }
-  }, [formData, isTouched, user])
+  }, [formData, isTouched, user]);
 
-    useEffect(() =>{
-      setBtnText(isEqualFormData ? 'Редактировать' : 'Сохранить')
-    }, [isEqualFormData])
-  
-
-    
+  useEffect(() => {
+    setBtnText(isEqualFormData ? "Редактировать" : "Сохранить");
+  }, [isEqualFormData]);
 
   return (
     <section className="profile">
@@ -86,25 +82,26 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
           />
         </div>
       </form>
-      <span className="input-error">
-        {error}
-      </span>
+      <span className="input-error">{error}</span>
       <button
-        className={`${!isEqualFormData ? 'profile__save-btn' : 'profile__confirm-btn '}`}
+        className={`${
+          !isEqualFormData ? "profile__save-btn" : "profile__confirm-btn "
+        }`}
         disabled={error}
         onClick={handleSubmitForm}
       >
         {btnText}
       </button>
       <button
-        className={`profile__exit-btn ${!isEqualFormData ? 'profile__exit-btn_disabled' : ''}`}
+        className={`profile__exit-btn ${
+          !isEqualFormData ? "profile__exit-btn_disabled" : ""
+        }`}
         onClick={handleLogOut}
       >
         Выйти из аккаунта
       </button>
-
     </section>
-  )
-};
+  );
+}
 
 export default Profile;
