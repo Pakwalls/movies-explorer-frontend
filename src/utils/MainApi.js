@@ -73,36 +73,11 @@ export const updateUserData = (name, email) => {
 };
 
 // ------------------------------------------------------------создание карточки фильма
-export const createMovieCard = (
-  country,
-  director,
-  duration,
-  year,
-  description,
-  image,
-  trailerLink,
-  thumbnail,
-  nameRU,
-  nameEN,
-  movieId,
-) => {
+export const createMovieCard = (cardData) => {
   return fetch(`${DATABASE_URL}/movies`, {
     method: 'POST',
     headers,
-    body: JSON.stringify(
-      {
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        thumbnail,
-        nameRU,
-        nameEN,
-        movieId,
-      })
+    body: JSON.stringify(cardData)
   })
     .then(res => checkResponse(res));
 };
@@ -116,6 +91,16 @@ export const deleteMovieCard = (_id) => {
   .then(res => checkResponse(res));
 }
 
+// ------------------------------------------------------------обновление токена
 export const updateToken = (token) => {
   headers.authorization = `Bearer ${token}`;
+}
+
+// ------------------------------------------------------------получение сохраненных фильмов
+export const getSavedMovies = () => {
+  return fetch(`${DATABASE_URL}/movies`, {
+    method: 'GET',
+    headers,
+  })
+  .then(res => checkResponse(res));
 }

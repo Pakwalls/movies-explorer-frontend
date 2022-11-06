@@ -97,6 +97,7 @@
 @import url('./components/Movies/movies.css');
 @import url('./components/Movies/__load-container/movies__load-container.css');
 @import url('./components/Movies/__load-btn/movies__load-bnt.css');
+@import url('./components/Movies/__search-err/movies__search-err.css');
 
 @import url('./components/SavedMovies/saved-movies.css');
 
@@ -135,4 +136,5 @@
 @import url('./components/NotFound/__link/not-found__link.css');
 @import url('./components/NotFound/__title/not-found__title.css');
 
+@import url('./components/input-error/input-error.css');
 @import url('./components/hovered-item/hovered-item.css');

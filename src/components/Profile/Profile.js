@@ -86,11 +86,22 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
           />
         </div>
       </form>
-      <span className="error">
+      <span className="input-error">
         {error}
       </span>
-      <button className={`${!isEqualFormData ? 'profile__save-btn' : 'profile__confirm-btn'}`} disabled={error} onClick={handleSubmitForm}>{btnText}</button>
-      <button className={`profile__exit-btn ${!isEqualFormData ? 'profile__exit-btn_disabled' : ''}`} onClick={handleLogOut}>Выйти из аккаунта</button>
+      <button
+        className={`${!isEqualFormData ? 'profile__save-btn' : 'profile__confirm-btn '}`}
+        disabled={error}
+        onClick={handleSubmitForm}
+      >
+        {btnText}
+      </button>
+      <button
+        className={`profile__exit-btn ${!isEqualFormData ? 'profile__exit-btn_disabled' : ''}`}
+        onClick={handleLogOut}
+      >
+        Выйти из аккаунта
+      </button>
 
     </section>
   )

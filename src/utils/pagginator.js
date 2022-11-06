@@ -12,7 +12,8 @@ export const loadNextIems = (limit, data, currentDataLength, filters) => {
   const filteredCards = data.filter(card => {
     const searchCondition = !!card.nameRU.toLowerCase().match(filters.search.toLowerCase())
     if (filters.isShorts) {
-      return searchCondition && card.isShort
+      const isShortCondition = card.duration <= 40
+      return searchCondition && isShortCondition
     }
     return searchCondition
   }).slice(currentDataLength, currentDataLength + limit)

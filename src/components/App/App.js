@@ -17,11 +17,13 @@ import NotFound from "../NotFound/NotFound.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import { authorizeUser, createUser, getUserData, updateToken } from "../../utils/MainApi.js";
 import { useEffect } from "react";
+import { ERRORS } from "../../utils/constants.js";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
   const [currentUser, setCurrentUser] = useState({});
+  const [apiError, setApiError] = useState('');
 
   useEffect(() => {
     tokenCheck();
@@ -39,7 +41,7 @@ function App() {
           setCurrentUser(res);
           history.push('/movies');
         })
-        .catch(err => console.log(err))
+        .catch(err => console.error(err))
     }
   }
 
@@ -55,7 +57,16 @@ function App() {
       .then((res) => {
         history.push('/signin');
       })
-      .catch((err) => console.error(err.message))
+      .catch((err) => {
+        console.error(err.message)
+        if (err.status === 400) {
+          setApiError(ERRORS.REGISTER.SERVER_ERROR)
+        } else if (err.status === 409) {
+          setApiError(ERRORS.EMAIL_EXIST_ERROR)
+        } else {
+          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR)
+        }
+      })
   };
 
   const handleAuthorization = (data) => {
@@ -65,9 +76,20 @@ function App() {
         setIsLoggedIn(true);
         updateToken(res.token);
         history.push('/movies');
+        setApiError('')
+
       })
-      .catch((err) => console.error(err.message))
-  }
+      .catch((err) => {
+        console.error(err)
+        if (err.status === 400) {
+          setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR)
+        } else if (err.status === 409) {
+          setApiError(ERRORS.LOGIN.TOKEN_ERROR)
+        } else {
+          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR)
+        }
+      })
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -95,17 +117,20 @@ function App() {
             <ProtectedRoute
               path="/saved-movies"
               component={SavedMovies}
+              currentUserId={currentUser._id}
               loggedIn={isLoggedIn}
             />
 
             <Route path="/signup">
               <Register
+                apiError={apiError}
                 onRegister={handleRegistration}
               />
             </Route>
 
             <Route path="/signin">
               <Login
+                apiError={apiError}
                 onLogin={handleAuthorization}
               />
             </Route>

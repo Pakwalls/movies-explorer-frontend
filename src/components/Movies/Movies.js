@@ -1,18 +1,20 @@
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchForm from '../SearchForm/SearchForm';
 import { useState, useEffect } from "react";
-import Preloader from 'preloader';
+import Preloader from '../Preloader/Preloader';
+import { IMAGE_LINK } from "../../utils/constants";
 import { getMoviesData } from '../../utils/MoviesApi';
-import { saveMoviesToStorage, getLocalStorageValue } from '../../utils/localStorageHandlers';
+import { saveMoviesToStorage, getLocalStorageValue, saveMoviesFilter } from '../../utils/localStorageHandlers';
 import { loadNextIems } from '../../utils/pagginator';
 import { useListenWindowSize } from '../../utils/windowSizeHandlers'
 import { setAppSizing } from '../../utils/appSizeHandler';
 
 function Movies() {
   const localMovies = getLocalStorageValue('movies');
+  const localFilters = getLocalStorageValue('moviesFilter');
   const appSize = useListenWindowSize();
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState(localFilters ? localFilters : {
     search: '',
     isShorts: false,
   })
@@ -24,22 +26,39 @@ function Movies() {
   const [cards, setCards] = useState([]);
   const [showNextBtn, setShowNextBtn] = useState(false);
   const [mainCards, setMainCards] = useState([]);
+  const [error, setError] = useState('');
+
 
   const handleChangeFilters = (newFilterState) => {
-    if (!isTouched) {
-      setIsTouched(true)
-    }
+    setIsTouched(true)
 
-    if (localMovies.length === 0) {
+    if (!localMovies || localMovies.length === 0) {
+      setIsLoading(true)
       getMoviesData()
         .then((data) => {
+          data.forEach(movie => {
+            movie.thumbnail = `${IMAGE_LINK}${movie.image.formats.thumbnail.url}`;
+            movie.image = `${IMAGE_LINK}${movie.image.url}`;
+            movie.movieId = movie.id;
+            delete movie['id'];
+            delete movie['created_at'];
+            delete movie['updated_at'];
+
+            return movie;
+          });
+          setError('');
+
           saveMoviesToStorage(data);
         })
-        .catch((err) => console.error(err.message))
+        .catch((err) => {
+          setError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+          console.error(err.message)
+        })
+        .finally(() => setIsLoading(false))
     }
-    setAppSizing(appSize, setInitCount, setPagginator);
 
     setFilters(newFilterState)
+    setAppSizing(appSize, setInitCount, setPagginator);
     setPage(1)
   }
 
@@ -49,18 +68,20 @@ function Movies() {
   }
 
   useEffect(() => {
-    if (isTouched) {
-      const values = getLocalStorageValue('movies');
+    const values = getLocalStorageValue('movies') || [];
 
+    if (isTouched && !isLoading && values.length !== 0) {
       const filteredCards = values.filter(card => {
         const searchCondition = !!card.nameRU.toLowerCase().match(filters.search.toLowerCase())
         if (filters.isShorts) {
-          return searchCondition && card.isShort
+          const isShortCondition = card.duration <= 40
+          return searchCondition && isShortCondition
         }
         return searchCondition
       })
 
-      setMainCards(filteredCards)
+      setMainCards(filteredCards);
+      setError(filteredCards.length=== 0 ? 'Ничего не найдено...' : '');
 
       if (initCount < filteredCards.length) {
         setShowNextBtn(true)
@@ -69,8 +90,9 @@ function Movies() {
       }
       setCards(filteredCards.slice(0, initCount))
     }
+    saveMoviesFilter(filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, appSize]);
+  }, [filters, appSize, isLoading]);
 
   useEffect(() => {
     if (isTouched && page !== 1) {
@@ -82,14 +104,31 @@ function Movies() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
+
+  const handleChangeCard = (cardData) => {
+    const changedCardIndex = cards.findIndex(card => card.movieId === cardData.movieId)
+    const newCards = cards.slice()
+    if (changedCardIndex !== -1) {
+      newCards.splice(changedCardIndex, 1, cardData)
+      setCards(newCards)
+    }
+  }
+
   return (
     <section className="movies">
-      <SearchForm filters={filters} handleChangeFilters={handleChangeFilters} />
-      <MoviesCardList cardItems={cards} />
+      <SearchForm filters={filters} handleChangeFilters={handleChangeFilters} isEmptyStorage={!!localMovies} />
+      {isLoading && <Preloader />}
+      <span className="movies__search-err">{error}</span>
+     
+      {!isLoading && cards.length !== 0 && isTouched &&
+        <MoviesCardList
+          cardItems={cards}
+          handleChangeCard={handleChangeCard}
+          isSavedPage={false}
+        />}
       <div className="movies__load-container">
-        {isLoading
-          ? <Preloader />
-          : showNextBtn && <button type='button' className="movies__load-bnt hovered-item" onClick={handleLoadMore}>Ещё</button>
+        {
+          showNextBtn && <button type='button' className="movies__load-bnt hovered-item" onClick={handleLoadMore}>Ещё</button>
         }
       </div>
     </section>

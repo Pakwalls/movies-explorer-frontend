@@ -6,3 +6,8 @@
   background-color: #2BE080;
   border-radius: 3px;
 }
+
+
+.profile__save-btn:disabled {
+  background-color: #F8F8F8;
+}

@@ -1,16 +1,14 @@
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList({ cardItems, children }) {
-
+function MoviesCardList({ cardItems, isSavedPage, handleChangeCard }) {
   return (
     <ul className="movies-card-list">
-      {cardItems.map(card => {
+      {cardItems.length !== 0 && cardItems.map(card => {
         return <MoviesCard
-          cardTitle={card.nameRU}
-          duration={card.duration}
-          image={card.image.url}
-          key={card.id}
-          saved={card.saved}
+          cardData={card}
+          isSavedPage={isSavedPage}
+          key={isSavedPage ? card._id : card.movieId}
+          handleChangeCard={handleChangeCard}
         />
       })}
     </ul>

@@ -1,4 +1,4 @@
-function Form({ formData, handleChange, handleSubmit, errors, btnText, isLogin = false }) {
+function Form({ formData, handleChange, handleSubmit, errors, btnText, apiError, isLogin = false }) {
   return (
     <form className="form__plate" onSubmit={handleSubmit}>
       <fieldset className="form__fieldset">
@@ -44,6 +44,7 @@ function Form({ formData, handleChange, handleSubmit, errors, btnText, isLogin =
         />
         <span className="form__error">{errors.password}</span>
       </fieldset>
+      <span className="input-error">{apiError}</span>
       <button type="submit" className="form__submit-button hovered-item">{btnText}</button>
     </form>
   )

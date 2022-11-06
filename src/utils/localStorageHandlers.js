@@ -3,12 +3,13 @@ export const saveMoviesToStorage = (data) => {
   localStorage.setItem('movies', JSON.stringify(data))
 }
 
-export const saveMoviesFilter = ({ isShort, searchValue }) => {
-  localStorage.setItem('moviesFilter', JSON.stringify({ isShort, searchValue }))
+export const saveMoviesFilter = ({search, isShorts}) => {
+  localStorage.setItem('moviesFilter', JSON.stringify({ search, isShorts }))
 }
 
 // Для работы с сохранеными карточками
 export const saveSavedMoviesToStorage = (data) => {
+
   localStorage.setItem('savedMovies', JSON.stringify(data))
 }
 
@@ -20,5 +21,6 @@ export const saveSavedMoviesFilter = ({ isShort, searchValue }) => {
  * @param {string} key ключ для взятия значения из localStorage, должен быть эквивалентен movies || moviesFilter || savedMovies || savedMoviesFilter
 */
 export const getLocalStorageValue = (key) => {
-  return JSON.parse(localStorage.getItem(key))
+  const data = JSON.parse(localStorage.getItem(key));
+  return data
 }
