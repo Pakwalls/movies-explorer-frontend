@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import deleteIcon from "../../images/delete-icon.svg";
 import savedIcon from "../../images/saved-icon.svg";
 import {
@@ -80,11 +80,17 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
         <h2 className="movies-card__title">{cardData.nameRU}</h2>
         <p className="movies-card__duration">{`${cardData.duration} минут`}</p>
       </div>
-      <img
-        src={cardData.image}
-        alt={cardData.nameRU}
-        className="movies-card__poster"
-      />
+      <Link
+        className="movies-card__trailer-link"
+        target="_blank"
+        to={{ pathname: cardData.trailerLink }}
+      >
+        <img
+          src={cardData.image}
+          alt={cardData.nameRU}
+          className="movies-card__poster"
+        />
+      </Link>
       {currentLocation === "/movies" && (
         <button
           type="button"

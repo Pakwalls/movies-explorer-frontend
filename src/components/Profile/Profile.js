@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import { ERRORS } from "../../utils/constants";
 import { updateUserData } from "../../utils/MainApi";
+import { ToastContainer, toast } from "react-toastify";
 
 function Profile({ user, handleLogOut, onUpdateUser }) {
   const [btnText, setBtnText] = useState("Редактировать");
@@ -9,13 +10,6 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
   const [isEqualFormData, setIsEqualFormData] = useState(true);
   const [formData, setFormData] = useState(user);
   const [error, setError] = useState("");
-
-  /*
-    Формдата для изменения и хранения информации о пользователе
-    флаг-значение для определения поменяли ли мы форм дату
-    хендлер дл обновления информации о пользователе
-    хендлер ошибок чтобы менять сотсояние нижнего блока с кнопками
-  */
 
   const handleChangeFormData = (e) => {
     setIsTouched(true);
@@ -33,6 +27,13 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
       .then((data) => {
         setFormData(data);
         onUpdateUser(data);
+        toast.success("Сохранено!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          theme: "colored",
+        });
       })
       .catch((err) => {
         if (err.status === 409) {
@@ -100,6 +101,7 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
       >
         Выйти из аккаунта
       </button>
+      <ToastContainer />
     </section>
   );
 }

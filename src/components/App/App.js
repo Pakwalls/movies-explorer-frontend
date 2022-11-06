@@ -1,5 +1,6 @@
 import { Switch, Route, useHistory } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../Header/Header.js";
 import Main from "../Main/Main.js";
 import Footer from "../Footer/Footer.js";
@@ -41,6 +42,7 @@ function App() {
           setIsLoggedIn(true);
           setCurrentUser(res);
           history.push("/movies");
+          handleClearError();
         })
         .catch((err) => console.error(err));
     }
@@ -49,14 +51,16 @@ function App() {
   const handleLogOut = () => {
     setIsLoggedIn(false);
     setCurrentUser({});
-    localStorage.removeItem("jwt");
+    localStorage.clear();
     history.push("/");
   };
 
   const handleRegistration = (data) => {
     return createUser(data)
       .then((res) => {
+        handleAuthorization(data);
         history.push("/signin");
+        handleClearError();
       })
       .catch((err) => {
         console.error(err.message);
@@ -77,11 +81,11 @@ function App() {
         setIsLoggedIn(true);
         updateToken(res.token);
         history.push("/movies");
-        setApiError("");
+        handleClearError();
       })
       .catch((err) => {
         console.error(err);
-        if (err.status === 400) {
+        if (err.status === 401) {
           setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR);
         } else if (err.status === 409) {
           setApiError(ERRORS.LOGIN.TOKEN_ERROR);
@@ -89,6 +93,10 @@ function App() {
           setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
         }
       });
+  };
+
+  const handleClearError = () => {
+    setApiError("");
   };
 
   return (
@@ -120,14 +128,22 @@ function App() {
             />
 
             <Route path="/signup">
-              <Register apiError={apiError} onRegister={handleRegistration} />
+              <Register
+                handleClearError={handleClearError}
+                apiError={apiError}
+                onRegister={handleRegistration}
+              />
             </Route>
 
             <Route path="/signin">
-              <Login apiError={apiError} onLogin={handleAuthorization} />
+              <Login
+                handleClearError={handleClearError}
+                apiError={apiError}
+                onLogin={handleAuthorization}
+              />
             </Route>
 
-            <Route path="/">
+            <Route exact path="/">
               <Main loggedIn={isLoggedIn} />
             </Route>
 

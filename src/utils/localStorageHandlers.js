@@ -23,6 +23,5 @@ export const saveSavedMoviesFilter = ({ isShort, searchValue }) => {
  * @param {string} key ключ для взятия значения из localStorage, должен быть эквивалентен movies || moviesFilter || savedMovies || savedMoviesFilter
  */
 export const getLocalStorageValue = (key) => {
-  const data = JSON.parse(localStorage.getItem(key));
-  return data;
+  return JSON.parse(localStorage.getItem(key));
 };

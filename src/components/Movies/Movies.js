@@ -141,7 +141,7 @@ function Movies() {
       {isLoading && <Preloader />}
       <span className="movies__search-err">{error}</span>
 
-      {!isLoading && cards.length !== 0 && isTouched && (
+      {!isLoading && (
         <MoviesCardList
           cardItems={cards}
           handleChangeCard={handleChangeCard}

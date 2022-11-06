@@ -32,6 +32,7 @@
 @import url('./components/Form/__input/form__input.css');
 @import url('./components/Form/__error/form__error.css');
 @import url('./components/Form/__submit-button/form__submit-button.css');
+@import url('./components/Form/__submit-button/_disabled/form__submit-button_disabled.css');
 @import url('./components/Form/__question/form__question.css');
 @import url('./components/Form/__link/form__link.css');
 
@@ -118,6 +119,7 @@
 @import url('./components/MoviesCard/__duration/movies-card__duration.css');
 @import url('./components/MoviesCard/__button/movies-card__button.css');
 @import url('./components/MoviesCard/__pressed-button/movies-card__button_pressed.css');
+@import url('./components/MoviesCard/__trailer-link/movies-card__trailer-link.css');
 
 @import url('./components/Burger/burger.css');
 @import url('./components/Burger/_opened/burger_opened.css');

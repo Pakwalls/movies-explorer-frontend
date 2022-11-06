@@ -10,7 +10,6 @@ import SearchForm from "../SearchForm/SearchForm";
 
 function SavedMovies({ currentUserId }) {
   const localMovies = getLocalStorageValue("savedMovies");
-
   const [filters, setFilters] = useState({
     search: "",
     isShorts: false,

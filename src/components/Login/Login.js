@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Login({ onLogin, apiError }) {
+function Login({ onLogin, apiError, handleClearError }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -48,7 +48,7 @@ function Login({ onLogin, apiError }) {
       />
       <p className="form__question">
         Ещё не зарегистрированы?{" "}
-        <Link to="/signup" className="form__link">
+        <Link to="/signup" className="form__link" onClick={handleClearError}>
           Регистрация
         </Link>
       </p>

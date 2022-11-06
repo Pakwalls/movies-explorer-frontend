@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useState } from "react";
+
 function Form({
   formData,
   handleChange,
@@ -7,6 +10,14 @@ function Form({
   apiError,
   isLogin = false,
 }) {
+  const [isError, setIsError] = useState(errors);
+
+  useEffect(() => {
+    const hasError = Object.values(errors).filter((err) => err);
+
+    setIsError(hasError.length !== 0 || apiError);
+  }, [errors, apiError]);
+
   return (
     <form className="form__plate" onSubmit={handleSubmit}>
       <fieldset className="form__fieldset">
@@ -58,9 +69,15 @@ function Form({
           required
         />
         <span className="form__error">{errors.password}</span>
+        <span className="input-error">{apiError}</span>
       </fieldset>
-      <span className="input-error">{apiError}</span>
-      <button type="submit" className="form__submit-button hovered-item">
+      <button
+        type="submit"
+        className={`form__submit-button ${
+          isError ? "form__submit-button_disabled" : ""
+        } hovered-item`}
+        disabled={isError}
+      >
         {btnText}
       </button>
     </form>

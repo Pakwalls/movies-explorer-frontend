@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Register({ onRegister, apiError }) {
+function Register({ onRegister, apiError, handleClearError }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -49,7 +49,7 @@ function Register({ onRegister, apiError }) {
       />
       <p className="form__question">
         Уже зарегистрированы?{" "}
-        <Link to="/signin" className="form__link">
+        <Link to="/movies" className="form__link" onClick={handleClearError}>
           Войти
         </Link>
       </p>
