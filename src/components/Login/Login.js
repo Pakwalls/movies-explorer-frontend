@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
@@ -14,19 +15,35 @@ function Login({ onLogin, apiError, handleClearError }) {
     password: "",
   });
 
+  const [isTouched, setIsTouched] = useState(false);
+  const isEmailValid = useEmailValidation(formData.email);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setIsTouched(true);
 
     setFormData({
       ...formData,
       [name]: value,
     });
 
-    setErrors({
-      ...errors,
-      [name]: e.target.validationMessage || "",
-    });
+    if (name !== "email") {
+      setErrors({
+        ...errors,
+        [name]: e.target.validationMessage || "",
+      });
+    }
   };
+
+  useEffect(() => {
+    if (isTouched) {
+      setErrors({
+        ...errors,
+        email: !isEmailValid ? "Введено некоректное значение в поле Email" : "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmailValid, isTouched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
