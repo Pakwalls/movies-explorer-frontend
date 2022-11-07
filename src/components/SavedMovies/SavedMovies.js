@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   getLocalStorageValue,
   saveSavedMoviesToStorage,
 } from "../../utils/localStorageHandlers";
 import { getSavedMovies } from "../../utils/MainApi";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 
-function SavedMovies({ currentUserId }) {
+function SavedMovies() {
   const localMovies = getLocalStorageValue("savedMovies");
   const [filters, setFilters] = useState({
     search: "",
@@ -17,6 +18,7 @@ function SavedMovies({ currentUserId }) {
   const [isTouched, setIsTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
+  const { _id: currentUserId } = useContext(CurrentUserContext);
 
   const handleChangeFilters = (newFilterState) => {
     setIsTouched(true);

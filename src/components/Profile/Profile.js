@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import { ERRORS } from "../../utils/constants";
 import { updateUserData } from "../../utils/MainApi";
 import { ToastContainer, toast } from "react-toastify";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Profile({ user, handleLogOut, onUpdateUser }) {
+function Profile({ handleLogOut, onUpdateUser }) {
   const [btnText, setBtnText] = useState("Редактировать");
   const [isTouched, setIsTouched] = useState(false);
+  const currentUser = useContext(CurrentUserContext);
   const [isEqualFormData, setIsEqualFormData] = useState(true);
-  const [formData, setFormData] = useState(user);
+  const [formData, setFormData] = useState(currentUser);
   const [error, setError] = useState("");
 
   const handleChangeFormData = (e) => {
@@ -46,9 +48,9 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
 
   useEffect(() => {
     if (isTouched) {
-      setIsEqualFormData(isEqual(formData, user));
+      setIsEqualFormData(isEqual(formData, currentUser));
     }
-  }, [formData, isTouched, user]);
+  }, [formData, isTouched, currentUser]);
 
   useEffect(() => {
     setBtnText(isEqualFormData ? "Редактировать" : "Сохранить");
@@ -56,7 +58,7 @@ function Profile({ user, handleLogOut, onUpdateUser }) {
 
   return (
     <section className="profile">
-      <h2 className="profile__title">Привет, {user.name}!</h2>
+      <h2 className="profile__title">Привет, {currentUser.name}!</h2>
       <form className="profile__form">
         <div className="profile__row">
           <label className="profile__label">Имя</label>

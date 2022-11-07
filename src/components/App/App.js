@@ -109,7 +109,6 @@ function App() {
               path="/profile"
               component={Profile}
               loggedIn={isLoggedIn}
-              user={currentUser}
               handleLogOut={handleLogOut}
               onUpdateUser={setCurrentUser}
             />
@@ -123,7 +122,6 @@ function App() {
             <ProtectedRoute
               path="/saved-movies"
               component={SavedMovies}
-              currentUserId={currentUser._id}
               loggedIn={isLoggedIn}
             />
 
