@@ -9,7 +9,7 @@ import {
 import { createMovieCard, deleteMovieCard } from "../../utils/MainApi";
 
 function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
-  const currentLocation = useHistory().location.pathname;
+  const history = useHistory();
 
   const [isSavedMovie, setIsSavedMovie] = useState(isSavedPage || false);
   const [isTouched, setIsTouched] = useState(false);
@@ -43,7 +43,13 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
         }
         handleChangeCard(cardData);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        if (err.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        }
+        console.error(err.message);
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -58,7 +64,13 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
         }
         handleChangeCard(newData);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        if (err.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        }
+        console.error(err.message);
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -91,7 +103,7 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
           className="movies-card__poster"
         />
       </Link>
-      {currentLocation === "/movies" && (
+      {history.location.pathname === "/movies" && (
         <button
           type="button"
           className={`movies-card__button${
@@ -102,7 +114,7 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
           {isSavedMovie ? <img alt="галочка" src={savedIcon} /> : "Сохранить"}
         </button>
       )}
-      {currentLocation === "/saved-movies" && (
+      {history.location.pathname === "/saved-movies" && (
         <button
           type="button"
           className="movies-card__button hovered-item"

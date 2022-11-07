@@ -9,7 +9,6 @@ import Login from "../Login/Login.js";
 import Profile from "../Profile/Profile.js";
 import Movies from "../Movies/Movies.js";
 import SavedMovies from "../SavedMovies/SavedMovies.js";
-import { useState } from "react";
 import NotFound from "../NotFound/NotFound.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import {
@@ -18,34 +17,41 @@ import {
   getUserData,
   updateToken,
 } from "../../utils/MainApi.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ERRORS } from "../../utils/constants.js";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
+  const currentRoute = history.location.pathname;
+
   const [currentUser, setCurrentUser] = useState({});
   const [apiError, setApiError] = useState("");
 
   useEffect(() => {
-    tokenCheck();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn]);
-
-  const tokenCheck = () => {
     const jwt = localStorage.getItem("jwt");
-
     if (jwt) {
       updateToken(jwt);
-      getUserData(jwt)
-        .then((res) => {
-          setIsLoggedIn(true);
-          setCurrentUser(res);
-          history.push("/movies");
-          handleClearError();
-        })
-        .catch((err) => console.error(err));
+      loginUser(jwt);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const loginUser = (jwt) => {
+    getUserData(jwt)
+      .then((res) => {
+        setIsLoggedIn(true);
+        setCurrentUser(res);
+        history.push(currentRoute !== "/" ? currentRoute : "/movies");
+        handleClearError();
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        }
+        console.error(err.message);
+      });
   };
 
   const handleLogOut = () => {
@@ -82,6 +88,13 @@ function App() {
         updateToken(res.token);
         history.push("/movies");
         handleClearError();
+        return getUserData(res.token);
+      })
+      .then((data) => {
+        setIsLoggedIn(true);
+        setCurrentUser(data);
+        history.push(currentRoute !== "/" ? currentRoute : "/movies");
+        handleClearError();
       })
       .catch((err) => {
         console.error(err);
@@ -89,6 +102,10 @@ function App() {
           setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR);
         } else if (err.status === 409) {
           setApiError(ERRORS.LOGIN.TOKEN_ERROR);
+        } else if (err.status === 401) {
+          localStorage.clear();
+          history.push("/");
+          console.error(err.message);
         } else {
           setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
         }

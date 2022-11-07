@@ -27,7 +27,7 @@
   right: 0;
   bottom: 0;
   border-radius: 20px;
-  background-color: #2BE080;
+  background-color: rgba(131, 125, 125, 0.808);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -45,6 +45,9 @@
   transition: .4s;
 }
 
+input:checked+.search-form__slider {
+  background-color: #2BE080;
+}
 
 input:checked+.search-form__slider:before {
   transform: translateX(16px);

@@ -15,7 +15,7 @@ function Main({ isLoggedIn }) {
       <Techs />
       <AboutMe />
       <Portfolio />
-      <Burger LoggedIn={isLoggedIn} />
+      <Burger loggedIn={isLoggedIn} />
     </main>
   );
 }
