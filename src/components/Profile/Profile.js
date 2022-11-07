@@ -12,6 +12,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
   const [isEqualFormData, setIsEqualFormData] = useState(true);
   const [formData, setFormData] = useState(currentUser);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeFormData = (e) => {
     setIsTouched(true);
@@ -25,25 +26,31 @@ function Profile({ handleLogOut, onUpdateUser }) {
   };
 
   const handleSubmitForm = (e) => {
-    updateUserData(formData.name, formData.email)
-      .then((data) => {
-        setFormData(data);
-        onUpdateUser(data);
-        toast.success("Сохранено!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          theme: "colored",
+    if (!isLoading) {
+      setIsLoading(true);
+      updateUserData(formData.name, formData.email)
+        .then((data) => {
+          setFormData(data);
+          onUpdateUser(data);
+          toast.success("Сохранено!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            theme: "colored",
+          });
+        })
+        .catch((err) => {
+          if (err.status === 409) {
+            setError(ERRORS.EMAIL_EXIST_ERROR);
+          } else {
+            setError(ERRORS.PROFILE.SERVER_ERROR);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-      })
-      .catch((err) => {
-        if (err.status === 409) {
-          setError(ERRORS.EMAIL_EXIST_ERROR);
-        } else {
-          setError(ERRORS.PROFILE.SERVER_ERROR);
-        }
-      });
+    }
   };
 
   useEffect(() => {
@@ -90,7 +97,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
         className={`${
           !isEqualFormData ? "profile__save-btn" : "profile__confirm-btn "
         }`}
-        disabled={error}
+        disabled={error || isLoading}
         onClick={handleSubmitForm}
       >
         {btnText}

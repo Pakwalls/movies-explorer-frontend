@@ -25,6 +25,7 @@ function App() {
   const history = useHistory();
   const currentRoute = history.location.pathname;
 
+  const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [apiError, setApiError] = useState("");
 
@@ -38,7 +39,7 @@ function App() {
   }, []);
 
   const loginUser = (jwt) => {
-    getUserData(jwt)
+    return getUserData(jwt)
       .then((res) => {
         setIsLoggedIn(true);
         setCurrentUser(res);
@@ -62,54 +63,67 @@ function App() {
   };
 
   const handleRegistration = (data) => {
-    return createUser(data)
-      .then((res) => {
-        handleAuthorization(data);
-        history.push("/signin");
-        handleClearError();
-      })
-      .catch((err) => {
-        console.error(err.message);
-        if (err.status === 400) {
-          setApiError(ERRORS.REGISTER.SERVER_ERROR);
-        } else if (err.status === 409) {
-          setApiError(ERRORS.EMAIL_EXIST_ERROR);
-        } else {
-          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
-        }
-      });
+    if (!isLoading) {
+      setIsLoading(true);
+      return createUser(data)
+        .then((res) => {
+          handleAuthorization(data);
+          history.push("/signin");
+          handleClearError();
+        })
+        .catch((err) => {
+          console.error(err.message);
+          if (err.status === 400) {
+            setApiError(ERRORS.REGISTER.SERVER_ERROR);
+          } else if (err.status === 409) {
+            setApiError(ERRORS.EMAIL_EXIST_ERROR);
+          } else {
+            setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const handleAuthorization = (data) => {
-    return authorizeUser(data)
-      .then((res) => {
-        localStorage.setItem("jwt", res.token);
-        setIsLoggedIn(true);
-        updateToken(res.token);
-        history.push("/movies");
-        handleClearError();
-        return getUserData(res.token);
-      })
-      .then((data) => {
-        setIsLoggedIn(true);
-        setCurrentUser(data);
-        history.push(currentRoute !== "/" ? currentRoute : "/movies");
-        handleClearError();
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.status === 401) {
-          setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR);
-        } else if (err.status === 409) {
-          setApiError(ERRORS.LOGIN.TOKEN_ERROR);
-        } else if (err.status === 401) {
-          localStorage.clear();
-          history.push("/");
-          console.error(err.message);
-        } else {
-          setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
-        }
-      });
+    if (!isLoading) {
+      setIsLoading(true);
+
+      return authorizeUser(data)
+        .then((res) => {
+          localStorage.setItem("jwt", res.token);
+          setIsLoggedIn(true);
+          updateToken(res.token);
+          history.push("/movies");
+          handleClearError();
+          return getUserData(res.token);
+        })
+        .then((data) => {
+          setIsLoggedIn(true);
+          setCurrentUser(data);
+          history.push(currentRoute !== "/" ? currentRoute : "/movies");
+          handleClearError();
+        })
+        .catch((err) => {
+          console.error(err);
+          if (err.status === 401) {
+            setApiError(ERRORS.LOGIN.INVALID_DATA_ERROR);
+          } else if (err.status === 409) {
+            setApiError(ERRORS.LOGIN.TOKEN_ERROR);
+          } else if (err.status === 401) {
+            localStorage.clear();
+            history.push("/");
+            console.error(err.message);
+          } else {
+            setApiError(ERRORS.OTHER.INTERNAL_SERVER_ERROR);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const handleClearError = () => {
@@ -147,6 +161,7 @@ function App() {
                 handleClearError={handleClearError}
                 apiError={apiError}
                 onRegister={handleRegistration}
+                isLoading={isLoading}
               />
             </Route>
 
@@ -155,6 +170,7 @@ function App() {
                 handleClearError={handleClearError}
                 apiError={apiError}
                 onLogin={handleAuthorization}
+                isLoading={isLoading}
               />
             </Route>
 

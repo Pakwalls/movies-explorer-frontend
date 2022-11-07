@@ -4,7 +4,7 @@ import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Login({ onLogin, apiError, handleClearError }) {
+function Login({ onLogin, apiError, handleClearError, isLoading }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -47,7 +47,10 @@ function Login({ onLogin, apiError, handleClearError }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(formData);
+    if (!isLoading) {
+      console.log(123);
+      onLogin(formData);
+    }
   };
 
   return (
@@ -61,6 +64,7 @@ function Login({ onLogin, apiError, handleClearError }) {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         apiError={apiError}
+        isLoading={isLoading}
         isLogin
       />
       <p className="form__question">

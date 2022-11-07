@@ -8,6 +8,7 @@ function Form({
   errors,
   btnText,
   apiError,
+  isLoading,
   isLogin = false,
 }) {
   const [isError, setIsError] = useState(errors);
@@ -76,7 +77,7 @@ function Form({
         className={`form__submit-button ${
           isError ? "form__submit-button_disabled" : ""
         } hovered-item`}
-        disabled={isError}
+        disabled={isError || isLoading}
       >
         {btnText}
       </button>

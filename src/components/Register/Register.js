@@ -4,7 +4,7 @@ import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Register({ onRegister, apiError, handleClearError }) {
+function Register({ onRegister, apiError, handleClearError, isLoading }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -49,7 +49,10 @@ function Register({ onRegister, apiError, handleClearError }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister(formData);
+    if (!isLoading) {
+      console.log(123);
+      onRegister(formData);
+    }
   };
 
   return (
@@ -63,6 +66,7 @@ function Register({ onRegister, apiError, handleClearError }) {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         apiError={apiError}
+        isLoading={isLoading}
       />
       <p className="form__question">
         Уже зарегистрированы?{" "}
