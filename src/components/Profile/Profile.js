@@ -1,18 +1,26 @@
 import { useContext, useEffect, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
-import { ERRORS } from "../../utils/constants";
+import {
+  EMAIL_ERR_MESSAGE,
+  ERRORS,
+  NAME_BTN_EDIT,
+  NAME_BTN_SAVE,
+  NAME_MSG_SUCCESS,
+} from "../../utils/constants";
 import { updateUserData } from "../../utils/MainApi";
 import { ToastContainer, toast } from "react-toastify";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { useEmailValidation } from "../../utils/useEmailValidatation";
 
 function Profile({ handleLogOut, onUpdateUser }) {
-  const [btnText, setBtnText] = useState("Редактировать");
+  const [btnText, setBtnText] = useState(NAME_BTN_EDIT);
   const [isTouched, setIsTouched] = useState(false);
   const currentUser = useContext(CurrentUserContext);
   const [isEqualFormData, setIsEqualFormData] = useState(true);
   const [formData, setFormData] = useState(currentUser);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isEmailValid = useEmailValidation(formData.email);
 
   const handleChangeFormData = (e) => {
     setIsTouched(true);
@@ -22,7 +30,9 @@ function Profile({ handleLogOut, onUpdateUser }) {
       ...formData,
       [name]: value,
     });
-    setError(validationMessage);
+    if (name !== "email") {
+      setError(validationMessage || "");
+    }
   };
 
   const handleSubmitForm = (e) => {
@@ -32,7 +42,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
         .then((data) => {
           setFormData(data);
           onUpdateUser(data);
-          toast.success("Сохранено!", {
+          toast.success(NAME_MSG_SUCCESS, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: true,
@@ -55,12 +65,19 @@ function Profile({ handleLogOut, onUpdateUser }) {
 
   useEffect(() => {
     if (isTouched) {
+      setError(!isEmailValid ? EMAIL_ERR_MESSAGE : "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmailValid, isTouched]);
+
+  useEffect(() => {
+    if (isTouched) {
       setIsEqualFormData(isEqual(formData, currentUser));
     }
   }, [formData, isTouched, currentUser]);
 
   useEffect(() => {
-    setBtnText(isEqualFormData ? "Редактировать" : "Сохранить");
+    setBtnText(isEqualFormData ? NAME_BTN_EDIT : NAME_BTN_SAVE);
   }, [isEqualFormData]);
 
   return (

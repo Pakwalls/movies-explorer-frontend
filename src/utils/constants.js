@@ -17,6 +17,9 @@ export const EMAIL_ERR_MESSAGE = "Введено некоректное знач
 export const FILTER_MESSAGE = "Ничего не найдено...";
 export const FILTER_ERR_MESSAGE =
   "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз";
+export const NAME_BTN_SAVE = "Сохранить";
+export const NAME_BTN_EDIT = "Редактировать";
+export const NAME_MSG_SUCCESS = "Сохранено!";
 
 export const ERRORS = {
   LOGIN: {
