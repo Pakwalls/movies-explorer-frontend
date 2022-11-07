@@ -11,7 +11,9 @@ import { createMovieCard, deleteMovieCard } from "../../utils/MainApi";
 function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
   const history = useHistory();
 
-  const [isSavedMovie, setIsSavedMovie] = useState(isSavedPage || false);
+  const [isSavedMovie, setIsSavedMovie] = useState(
+    cardData.saved || isSavedPage || false,
+  );
   const [isTouched, setIsTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +43,11 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
           delete cardData["_id"];
           delete cardData["__v"];
         }
-        handleChangeCard(cardData);
+        const newData = {
+          ...cardData,
+          saved: false,
+        };
+        handleChangeCard(newData);
       })
       .catch((err) => {
         if (err.status === 401) {
@@ -54,10 +60,12 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
   };
 
   const addAction = () => {
+    delete cardData["saved"];
+
     createMovieCard(cardData)
       .then((data) => {
         const savedMovies = getLocalStorageValue("savedMovies");
-        const newData = { ...data };
+        const newData = { ...data, saved: true };
         if (savedMovies) {
           savedMovies.push(data);
           saveSavedMoviesToStorage(savedMovies);

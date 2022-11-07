@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { EMAIL_ERR_MESSAGE } from "../../utils/constants";
 import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
@@ -39,7 +40,7 @@ function Login({ onLogin, apiError, handleClearError, isLoading }) {
     if (isTouched) {
       setErrors({
         ...errors,
-        email: !isEmailValid ? "Введено некоректное значение в поле Email" : "",
+        email: !isEmailValid ? EMAIL_ERR_MESSAGE : "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +49,6 @@ function Login({ onLogin, apiError, handleClearError, isLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isLoading) {
-      console.log(123);
       onLogin(formData);
     }
   };

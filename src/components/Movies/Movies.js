@@ -2,7 +2,14 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 import { useState, useEffect } from "react";
 import Preloader from "../Preloader/Preloader";
-import { IMAGE_LINK } from "../../utils/constants";
+import {
+  FILTER_ERR_MESSAGE,
+  FILTER_MESSAGE,
+  IMAGE_LINK,
+  LARGE_COUNT,
+  LARGE_PAGGINATOR,
+  SHORT_DURATION,
+} from "../../utils/constants";
 import { getMoviesData } from "../../utils/MoviesApi";
 import {
   saveMoviesToStorage,
@@ -26,8 +33,8 @@ function Movies() {
           isShorts: false,
         },
   );
-  const [initCount, setInitCount] = useState(12);
-  const [pagginator, setPagginator] = useState(3);
+  const [initCount, setInitCount] = useState(LARGE_COUNT);
+  const [pagginator, setPagginator] = useState(LARGE_PAGGINATOR);
   const [page, setPage] = useState(1);
   const [isTouched, setIsTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,10 +65,7 @@ function Movies() {
           saveMoviesToStorage(data);
         })
         .catch((err) => {
-          setError(
-            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
-          );
-          console.error(err.message);
+          setError(FILTER_ERR_MESSAGE);
         })
         .finally(() => setIsLoading(false));
     }
@@ -85,14 +89,14 @@ function Movies() {
           .toLowerCase()
           .match(filters.search.toLowerCase());
         if (filters.isShorts) {
-          const isShortCondition = card.duration <= 40;
+          const isShortCondition = card.duration <= SHORT_DURATION;
           return searchCondition && isShortCondition;
         }
         return searchCondition;
       });
 
       setMainCards(filteredCards);
-      setError(filteredCards.length === 0 ? "Ничего не найдено..." : "");
+      setError(filteredCards.length === 0 ? FILTER_MESSAGE : "");
 
       if (initCount < filteredCards.length) {
         setShowNextBtn(true);

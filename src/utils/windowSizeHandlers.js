@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { LARGE_BRAKEPOINT, MEDIUM_BRAKEPOINT } from "./constants";
 
 export const useListenWindowSize = () => {
   const [appSize, setAppSize] = useState(() => {
-    if (window.innerWidth >= 1140) {
+    if (window.innerWidth >= LARGE_BRAKEPOINT) {
       return "large";
-    } else if (window.innerWidth >= 712) {
+    } else if (window.innerWidth >= MEDIUM_BRAKEPOINT) {
       return "medium";
     } else {
       return "small";
@@ -13,9 +14,9 @@ export const useListenWindowSize = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1140) {
+      if (window.innerWidth >= LARGE_BRAKEPOINT) {
         setAppSize("large");
-      } else if (window.innerWidth >= 712) {
+      } else if (window.innerWidth >= MEDIUM_BRAKEPOINT) {
         setAppSize("medium");
       } else {
         setAppSize("small");

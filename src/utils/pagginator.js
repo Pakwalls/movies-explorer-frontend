@@ -1,3 +1,5 @@
+import { SHORT_DURATION } from "./constants";
+
 /**
  * @param {number} limit количество подгружаемых айтемов
  * @param {Array} data все карточки сохранненые в локал сторадже
@@ -14,7 +16,8 @@ export const loadNextIems = (limit, data, currentDataLength, filters) => {
         .toLowerCase()
         .match(filters.search.toLowerCase());
       if (filters.isShorts) {
-        const isShortCondition = card.duration <= 40;
+        const isShortCondition = card.duration <= SHORT_DURATION;
+
         return searchCondition && isShortCondition;
       }
       return searchCondition;

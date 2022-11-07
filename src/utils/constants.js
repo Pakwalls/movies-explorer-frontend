@@ -2,6 +2,22 @@ export const IMAGE_LINK = "https://api.nomoreparties.co";
 export const MOVIE_URL = "https://api.nomoreparties.co/beatfilm-movies";
 export const DATABASE_URL = "https://api.diproject.nomoredomains.icu";
 
+export const SHORT_DURATION = 40;
+
+export const LARGE_COUNT = 12;
+export const MEDIUM_COUNT = 8;
+export const SMALL_COUNT = 5;
+
+export const LARGE_PAGGINATOR = 3;
+export const MEDIUM_PAGGINATOR = 2;
+
+export const LARGE_BRAKEPOINT = 1140;
+export const MEDIUM_BRAKEPOINT = 712;
+export const EMAIL_ERR_MESSAGE = "Введено некоректное значение в поле Email";
+export const FILTER_MESSAGE = "Ничего не найдено...";
+export const FILTER_ERR_MESSAGE =
+  "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз";
+
 export const ERRORS = {
   LOGIN: {
     INVALID_DATA_ERROR: "Вы ввели неправильный логин или пароль.",

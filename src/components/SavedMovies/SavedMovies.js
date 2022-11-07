@@ -2,7 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import {
   getLocalStorageValue,
   saveSavedMoviesToStorage,
+  saveMoviesToStorage,
 } from "../../utils/localStorageHandlers";
+import { SHORT_DURATION } from "../../utils/constants";
 import { getSavedMovies } from "../../utils/MainApi";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Preloader from "../Preloader/Preloader";
@@ -32,6 +34,22 @@ function SavedMovies() {
             ({ owner }) => owner && owner === currentUserId,
           );
           saveSavedMoviesToStorage(userCards);
+          const allMovies = getLocalStorageValue("movies");
+          const newAllMovies = allMovies.map((movie) => {
+            const isHaveSavedCard = userCards.findIndex(
+              (userCard) => movie.movieId === userCard.movieId,
+            );
+            const newCard = {
+              ...movie,
+              saved: isHaveSavedCard !== -1,
+            };
+
+            if (isHaveSavedCard !== -1 && userCards[isHaveSavedCard]._id) {
+              newCard._id = userCards[isHaveSavedCard]._id;
+            }
+            return newCard;
+          });
+          saveMoviesToStorage(newAllMovies);
         })
         .catch((err) => console.error(err.message))
         .finally(() => setIsLoading(false));
@@ -48,7 +66,7 @@ function SavedMovies() {
           .toLowerCase()
           .match(filters.search.toLowerCase());
         if (filters.isShorts) {
-          const isShortCondition = card.duration <= 40;
+          const isShortCondition = card.duration <= SHORT_DURATION;
           return searchCondition && isShortCondition;
         }
         return searchCondition;
@@ -62,6 +80,24 @@ function SavedMovies() {
     const changedCardIndex = cards.findIndex(
       (card) => card._id === cardData._id,
     );
+    const allMovies = getLocalStorageValue("movies");
+    const userCards = getLocalStorageValue("savedMovies");
+    const newAllMovies = allMovies.map((movie) => {
+      const isHaveSavedCard = userCards.findIndex(
+        (userCard) => movie.movieId === userCard.movieId,
+      );
+      const newCard = {
+        ...movie,
+        saved: isHaveSavedCard !== -1,
+      };
+
+      if (isHaveSavedCard !== -1 && userCards[isHaveSavedCard]._id) {
+        newCard._id = userCards[isHaveSavedCard]._id;
+      }
+      return newCard;
+    });
+    console.log(newAllMovies);
+    saveMoviesToStorage(newAllMovies);
     const newCards = cards.slice();
     if (changedCardIndex !== -1) {
       newCards.splice(changedCardIndex, 1);
