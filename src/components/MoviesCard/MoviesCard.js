@@ -4,11 +4,12 @@ import deleteIcon from "../../images/delete-icon.svg";
 import savedIcon from "../../images/saved-icon.svg";
 import {
   saveSavedMoviesToStorage,
+  saveMoviesToStorage,
   getLocalStorageValue,
 } from "../../utils/localStorageHandlers";
 import { createMovieCard, deleteMovieCard } from "../../utils/MainApi";
 
-function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
+function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
   const history = useHistory();
 
   const [isSavedMovie, setIsSavedMovie] = useState(
@@ -20,7 +21,6 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
   const handleSaveMovie = () => {
     if (!isLoading) {
       setIsTouched(true);
-      setIsSavedMovie(!isSavedMovie);
       setIsLoading(true);
     }
   };
@@ -28,6 +28,7 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
   const deleteAction = () => {
     deleteMovieCard(cardData._id)
       .then(() => {
+        setIsSavedMovie(!isSavedMovie);
         const savedMovies = getLocalStorageValue("savedMovies");
         if (savedMovies) {
           const deletedItemIndex = savedMovies.findIndex(
@@ -47,9 +48,19 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
           ...cardData,
           saved: false,
         };
+        if (!isSavedPage) {
+          const allMovies = getLocalStorageValue("movies");
+          const allMoviesCardIndex = allMovies.findIndex(
+            (movie) => movie.movieId === newData.movieId,
+          );
+          savedMovies.splice(allMoviesCardIndex, 1, newData);
+          saveMoviesToStorage(savedMovies);
+        }
+
         handleChangeCard(newData);
       })
       .catch((err) => {
+        handleLogOut();
         if (err.status === 401) {
           localStorage.clear();
           history.push("/");
@@ -61,18 +72,28 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
 
   const addAction = () => {
     delete cardData["saved"];
+    delete cardData["owner"];
 
     createMovieCard(cardData)
       .then((data) => {
+        setIsSavedMovie(!isSavedMovie);
         const savedMovies = getLocalStorageValue("savedMovies");
         const newData = { ...data, saved: true };
         if (savedMovies) {
-          savedMovies.push(data);
+          savedMovies.push(newData);
           saveSavedMoviesToStorage(savedMovies);
+        } else {
+          const allMovies = getLocalStorageValue("movies");
+          const allMoviesCardIndex = allMovies.findIndex(
+            (movie) => movie.movieId === newData.movieId,
+          );
+          savedMovies.splice(allMoviesCardIndex, 1, newData);
+          saveMoviesToStorage(savedMovies);
         }
         handleChangeCard(newData);
       })
       .catch((err) => {
+        handleLogOut();
         if (err.status === 401) {
           localStorage.clear();
           history.push("/");
@@ -84,7 +105,7 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard }) {
 
   useEffect(() => {
     if (isTouched) {
-      if (!isSavedMovie || isSavedPage) {
+      if (isSavedMovie || isSavedPage) {
         deleteAction();
       } else {
         addAction();

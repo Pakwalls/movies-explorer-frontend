@@ -11,7 +11,7 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 
-function SavedMovies() {
+function SavedMovies({ handleLogOut }) {
   const localMovies = getLocalStorageValue("savedMovies");
   const [filters, setFilters] = useState({
     search: "",
@@ -24,6 +24,9 @@ function SavedMovies() {
 
   const handleChangeFilters = (newFilterState) => {
     setIsTouched(true);
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
 
     if (!localMovies || localMovies.length === 0) {
       setIsLoading(true);
@@ -58,6 +61,10 @@ function SavedMovies() {
   };
 
   useEffect(() => {
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
+
     const values = getLocalStorageValue("savedMovies") || [];
 
     if (isTouched && !isLoading && values.length !== 0) {
@@ -77,6 +84,10 @@ function SavedMovies() {
   }, [filters, isLoading]);
 
   const handleChangeCard = (cardData) => {
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
+
     const changedCardIndex = cards.findIndex(
       (card) => card._id === cardData._id,
     );
@@ -96,7 +107,7 @@ function SavedMovies() {
       }
       return newCard;
     });
-    console.log(newAllMovies);
+
     saveMoviesToStorage(newAllMovies);
     const newCards = cards.slice();
     if (changedCardIndex !== -1) {
@@ -118,6 +129,7 @@ function SavedMovies() {
           cardItems={cards}
           isSavedPage={true}
           handleChangeCard={handleChangeCard}
+          handleLogOut={handleLogOut}
         />
       )}
     </section>

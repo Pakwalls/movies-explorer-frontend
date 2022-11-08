@@ -16,8 +16,14 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+// ------------------------------------------------------------обновление токена
+export const updateToken = (token) => {
+  headers.authorization = `Bearer ${token}`;
+};
+
 // ------------------------------------------------------------создание пользователя
 export const createUser = ({ name, email, password }) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/signup`, {
     method: "POST",
     headers,
@@ -31,6 +37,7 @@ export const createUser = ({ name, email, password }) => {
 
 // ------------------------------------------------------------логин пользователя
 export const authorizeUser = ({ email, password }) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/signin`, {
     method: "POST",
     headers,
@@ -43,6 +50,7 @@ export const authorizeUser = ({ email, password }) => {
 
 // ------------------------------------------------------------информация о пользователе
 export const getUserData = (token) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/users/me`, {
     method: "GET",
     headers: {
@@ -54,6 +62,7 @@ export const getUserData = (token) => {
 
 // ------------------------------------------------------------обновление информации о пользователе
 export const updateUserData = (name, email) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/users/me`, {
     method: "PATCH",
     headers,
@@ -66,6 +75,7 @@ export const updateUserData = (name, email) => {
 
 // ------------------------------------------------------------создание карточки фильма
 export const createMovieCard = (cardData) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/movies`, {
     method: "POST",
     headers,
@@ -75,19 +85,16 @@ export const createMovieCard = (cardData) => {
 
 // ------------------------------------------------------------удаление карточки фильма
 export const deleteMovieCard = (_id) => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/movies/${_id}`, {
     method: "DELETE",
     headers,
   }).then((res) => checkResponse(res));
 };
 
-// ------------------------------------------------------------обновление токена
-export const updateToken = (token) => {
-  headers.authorization = `Bearer ${token}`;
-};
-
 // ------------------------------------------------------------получение сохраненных фильмов
 export const getSavedMovies = () => {
+  updateToken(localStorage.getItem("jwt"));
   return fetch(`${DATABASE_URL}/movies`, {
     method: "GET",
     headers,

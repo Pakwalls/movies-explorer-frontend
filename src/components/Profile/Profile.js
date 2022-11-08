@@ -20,6 +20,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
   const [formData, setFormData] = useState(currentUser);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const isEmailValid = useEmailValidation(formData.email);
 
   const handleChangeFormData = (e) => {
@@ -36,7 +37,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
   };
 
   const handleSubmitForm = (e) => {
-    if (!isLoading) {
+    if (!isLoading && !isEqualFormData) {
       setIsLoading(true);
       updateUserData(formData.name, formData.email)
         .then((data) => {

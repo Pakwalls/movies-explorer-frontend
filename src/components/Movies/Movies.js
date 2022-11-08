@@ -20,7 +20,7 @@ import { loadNextIems } from "../../utils/pagginator";
 import { useListenWindowSize } from "../../utils/windowSizeHandlers";
 import { setAppSizing } from "../../utils/appSizeHandler";
 
-function Movies() {
+function Movies({ handleLogOut }) {
   const localMovies = getLocalStorageValue("movies");
   const localFilters = getLocalStorageValue("moviesFilter");
   const appSize = useListenWindowSize();
@@ -45,6 +45,9 @@ function Movies() {
 
   const handleChangeFilters = (newFilterState) => {
     setIsTouched(true);
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
 
     if (!localMovies || localMovies.length === 0) {
       setIsLoading(true);
@@ -76,12 +79,19 @@ function Movies() {
   };
 
   const handleLoadMore = () => {
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
+
     setPage(page + 1);
     setAppSizing(appSize, setInitCount, setPagginator);
   };
 
   useEffect(() => {
     const values = getLocalStorageValue("movies") || [];
+    if (!localStorage.getItem("jwt")) {
+      handleLogOut();
+    }
 
     if (isTouched && !isLoading && values.length !== 0) {
       const filteredCards = values.filter((card) => {
@@ -150,6 +160,7 @@ function Movies() {
           cardItems={cards}
           handleChangeCard={handleChangeCard}
           isSavedPage={false}
+          handleLogOut={handleLogOut}
         />
       )}
       <div className="movies__load-container">

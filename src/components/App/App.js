@@ -21,19 +21,19 @@ import { useEffect, useState } from "react";
 import { ERRORS } from "../../utils/constants.js";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
-  const currentRoute = history.location.pathname;
+  const token = localStorage.getItem("jwt");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [apiError, setApiError] = useState("");
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      updateToken(jwt);
-      loginUser(jwt);
+    if (token) {
+      loginUser(token);
+    } else {
+      setIsLoggedIn(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -41,9 +41,10 @@ function App() {
   const loginUser = (jwt) => {
     return getUserData(jwt)
       .then((res) => {
-        setIsLoggedIn(true);
         setCurrentUser(res);
-        history.push(currentRoute !== "/" ? currentRoute : "/movies");
+        if (!isLoggedIn) {
+          setIsLoggedIn(true);
+        }
         handleClearError();
       })
       .catch((err) => {
@@ -51,6 +52,7 @@ function App() {
           localStorage.clear();
           history.push("/");
         }
+        setIsLoggedIn(false);
         console.error(err.message);
       });
   };
@@ -73,6 +75,8 @@ function App() {
         })
         .catch((err) => {
           console.error(err.message);
+          setIsLoggedIn(false);
+
           if (err.status === 400) {
             setApiError(ERRORS.REGISTER.SERVER_ERROR);
           } else if (err.status === 409) {
@@ -94,17 +98,17 @@ function App() {
       return authorizeUser(data)
         .then((res) => {
           localStorage.setItem("jwt", res.token);
-          setIsLoggedIn(true);
           updateToken(res.token);
-          history.push("/movies");
           handleClearError();
           return getUserData(res.token);
         })
         .then((data) => {
-          setIsLoggedIn(true);
           setCurrentUser(data);
-          history.push(currentRoute !== "/" ? currentRoute : "/movies");
+          history.push("/movies");
           handleClearError();
+          if (!isLoggedIn) {
+            setIsLoggedIn(true);
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -114,6 +118,7 @@ function App() {
             setApiError(ERRORS.LOGIN.TOKEN_ERROR);
           } else if (err.status === 401) {
             localStorage.clear();
+            setIsLoggedIn(false);
             history.push("/");
             console.error(err.message);
           } else {
@@ -145,15 +150,18 @@ function App() {
             />
 
             <ProtectedRoute
+              exact
               path="/movies"
               component={Movies}
               loggedIn={isLoggedIn}
+              handleLogOut={handleLogOut}
             />
 
             <ProtectedRoute
               path="/saved-movies"
               component={SavedMovies}
               loggedIn={isLoggedIn}
+              handleLogOut={handleLogOut}
             />
 
             <Route path="/signup">
@@ -178,7 +186,7 @@ function App() {
               <Main loggedIn={isLoggedIn} />
             </Route>
 
-            <Route path="*">
+            <Route>
               <NotFound />
             </Route>
           </Switch>

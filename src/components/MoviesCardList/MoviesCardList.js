@@ -1,6 +1,11 @@
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList({ cardItems, isSavedPage, handleChangeCard }) {
+function MoviesCardList({
+  cardItems,
+  isSavedPage,
+  handleChangeCard,
+  handleLogOut,
+}) {
   return (
     <ul className="movies-card-list">
       {cardItems.length !== 0 &&
@@ -11,6 +16,7 @@ function MoviesCardList({ cardItems, isSavedPage, handleChangeCard }) {
               isSavedPage={isSavedPage}
               key={isSavedPage ? card._id : card.movieId}
               handleChangeCard={handleChangeCard}
+              handleLogOut={handleLogOut}
             />
           );
         })}
