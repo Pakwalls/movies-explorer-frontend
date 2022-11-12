@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { EMAIL_ERR_MESSAGE } from "../../utils/constants";
-import { useEmailValidation } from "../../utils/useEmailValidatation";
+import { emailValidation } from "../../utils/emailValidation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
@@ -25,10 +25,12 @@ function Register({
   });
 
   const [isTouched, setIsTouched] = useState(false);
-  const isEmailValid = useEmailValidation(formData.email);
+  const isEmailValid = emailValidation(formData.email);
+  const [isInputsValid, setIsInputsValid] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, validationMessage } = e.target;
+    setIsInputsValid(e.target.closest("form").checkValidity());
     setIsTouched(true);
 
     setFormData({
@@ -36,11 +38,16 @@ function Register({
       [name]: value,
     });
 
-    if (name !== "email") {
-      setErrors({
-        ...errors,
-        [name]: e.target.validationMessage || "",
-      });
+    if (name === "email" && (!validationMessage || validationMessage === "")) {
+      const isEmailValid = emailValidation(value);
+
+      if (isEmailValid) {
+        setErrors({ ...errors, email: "" });
+      } else {
+        setErrors({ ...errors, email: EMAIL_ERR_MESSAGE });
+      }
+    } else {
+      setErrors({ ...errors, [name]: validationMessage });
     }
   };
 
@@ -77,6 +84,7 @@ function Register({
             handleSubmit={handleSubmit}
             apiError={apiError}
             isLoading={isLoading}
+            isInputsValid={isInputsValid}
           />
           <p className="form__question">
             Уже зарегистрированы?{" "}

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { EMAIL_ERR_MESSAGE } from "../../utils/constants";
-import { useEmailValidation } from "../../utils/useEmailValidatation";
+import { emailValidation } from "../../utils/emailValidation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
@@ -15,36 +15,29 @@ function Login({ onLogin, apiError, handleClearError, isLoading, loggedIn }) {
     email: "",
     password: "",
   });
-
-  const [isTouched, setIsTouched] = useState(false);
-  const isEmailValid = useEmailValidation(formData.email);
+  const [isInputsValid, setIsInputsValid] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setIsTouched(true);
+    const { name, value, validationMessage } = e.target;
+    setIsInputsValid(e.target.closest("form").checkValidity());
 
     setFormData({
       ...formData,
       [name]: value,
     });
 
-    if (name !== "email") {
-      setErrors({
-        ...errors,
-        [name]: e.target.validationMessage || "",
-      });
+    if (name === "email" && (!validationMessage || validationMessage === "")) {
+      const isEmailValid = emailValidation(value);
+
+      if (isEmailValid) {
+        setErrors({ ...errors, email: "" });
+      } else {
+        setErrors({ ...errors, email: EMAIL_ERR_MESSAGE });
+      }
+    } else {
+      setErrors({ ...errors, [name]: validationMessage });
     }
   };
-
-  useEffect(() => {
-    if (isTouched) {
-      setErrors({
-        ...errors,
-        email: !isEmailValid ? EMAIL_ERR_MESSAGE : "",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmailValid, isTouched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,6 +62,7 @@ function Login({ onLogin, apiError, handleClearError, isLoading, loggedIn }) {
             handleSubmit={handleSubmit}
             apiError={apiError}
             isLoading={isLoading}
+            isInputsValid={isInputsValid}
             isLogin
           />
           <p className="form__question">

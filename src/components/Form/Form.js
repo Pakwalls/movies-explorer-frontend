@@ -9,6 +9,7 @@ function Form({
   btnText,
   apiError,
   isLoading,
+  isInputsValid,
   isLogin = false,
 }) {
   const [isError, setIsError] = useState(errors);
@@ -16,8 +17,8 @@ function Form({
   useEffect(() => {
     const hasError = Object.values(errors).filter((err) => err);
 
-    setIsError(hasError.length !== 0 || apiError);
-  }, [errors, apiError]);
+    setIsError(hasError.length !== 0);
+  }, [errors]);
 
   return (
     <form className="form__plate" onSubmit={handleSubmit}>
@@ -75,9 +76,11 @@ function Form({
       <button
         type="submit"
         className={`form__submit-button ${
-          isError ? "form__submit-button_disabled" : ""
+          isError || isLoading || !isInputsValid
+            ? "form__submit-button_disabled"
+            : ""
         } hovered-item`}
-        disabled={isError || isLoading}
+        disabled={isError || isLoading || !isInputsValid}
       >
         {btnText}
       </button>

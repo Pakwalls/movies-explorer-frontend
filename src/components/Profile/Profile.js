@@ -10,7 +10,7 @@ import {
 import { updateUserData } from "../../utils/MainApi";
 import { ToastContainer, toast } from "react-toastify";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { useEmailValidation } from "../../utils/useEmailValidatation";
+import { emailValidation } from "../../utils/emailValidation";
 
 function Profile({ handleLogOut, onUpdateUser }) {
   const [isTouched, setIsTouched] = useState(false);
@@ -20,8 +20,10 @@ function Profile({ handleLogOut, onUpdateUser }) {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
-  const isEmailValid = useEmailValidation(formData.email);
+  const [inputValidationStatus, setInputValidationStatus] = useState({
+    name: true,
+    email: true,
+  });
 
   const handleChangeFormData = (e) => {
     setIsTouched(true);
@@ -31,7 +33,24 @@ function Profile({ handleLogOut, onUpdateUser }) {
       ...formData,
       [name]: value,
     });
-    if (name !== "email") {
+
+    if (name === "email" && (!validationMessage || validationMessage === "")) {
+      const isEmailValid = emailValidation(value);
+
+      if (isEmailValid) {
+        setError("");
+      } else {
+        setError(EMAIL_ERR_MESSAGE);
+      }
+      setInputValidationStatus({
+        ...inputValidationStatus,
+        email: inputValidationStatus,
+      });
+    } else {
+      setInputValidationStatus({
+        ...inputValidationStatus,
+        [name]: !validationMessage,
+      });
       setError(validationMessage || "");
     }
   };
@@ -69,13 +88,6 @@ function Profile({ handleLogOut, onUpdateUser }) {
     setIsEdit(true);
     setIsTouched(true);
   };
-
-  useEffect(() => {
-    if (isTouched) {
-      setError(!isEmailValid ? EMAIL_ERR_MESSAGE : "");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmailValid, isTouched]);
 
   useEffect(() => {
     if (isTouched) {
@@ -127,7 +139,12 @@ function Profile({ handleLogOut, onUpdateUser }) {
           type="submit"
           className="profile__confirm-btn"
           onClick={handleSubmitForm}
-          disabled={error || isLoading || isEqualFormData}
+          disabled={
+            isLoading ||
+            isEqualFormData ||
+            !inputValidationStatus.name ||
+            !inputValidationStatus.email
+          }
         >
           {NAME_BTN_SAVE}
         </button>
