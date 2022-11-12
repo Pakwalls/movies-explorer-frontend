@@ -1,47 +1,77 @@
-import searchIcon from '../../images/search-icon.svg'
-import invertedSearchIcon from '../../images/inverted-search-icon.svg'
-import { useState } from "react";
+import searchIcon from "../../images/search-icon.svg";
+import invertedSearchIcon from "../../images/inverted-search-icon.svg";
+import { useState, useEffect } from "react";
 
-function SearchForm({ filters, handleChangeFilters }) {
-  const [searchValue, setSearchValue] = useState('')
+function SearchForm({ filters, handleChangeFilters, isEmptyStorage }) {
+  const [searchValue, setSearchValue] = useState(filters.search);
+  const [isShorts, setIsShorts] = useState(filters.isShorts);
+
   const handleChangeSearchValue = (e) => {
-    setSearchValue(e.target.value)
-  }
+    setSearchValue(e.target.value);
+  };
+  const handleChangeToggleBtn = (e) => {
+    setIsShorts(!isShorts);
+  };
 
-  const handleChangeToggleBtn = () => {
-    handleChangeFilters({
-      ...filters,
-      isShorts: !filters.isShorts
-    })
-  }
+  useEffect(() => {
+    if (isEmptyStorage) {
+      handleChangeFilters({
+        ...filters,
+        isShorts,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isShorts, isEmptyStorage]);
 
   const handleClickSearch = (e) => {
     e.preventDefault();
 
     handleChangeFilters({
       ...filters,
-      search: searchValue
-    })
-  }
-  
+      search: searchValue,
+    });
+  };
+
   return (
-    <div className='searchForm'>
-      <form className="searchForm__search-container">
-        <img src={searchIcon} className="searchForm__icon" alt="иконка поиск" />
-        <input className="searchForm__input" placeholder='Фильм' value={searchValue} onChange={handleChangeSearchValue} required/>
-        <button type='submit' className="searchForm__btn hovered-item" onClick={handleClickSearch}>
-          <img alt="иконка поиска" src={invertedSearchIcon} className="searchForm__img" />
+    <div className="search-form">
+      <form className="search-form__search-container">
+        <img
+          src={searchIcon}
+          className="search-form__icon"
+          alt="иконка поиск"
+        />
+        <input
+          className="search-form__input"
+          placeholder="Фильм"
+          value={searchValue}
+          onChange={handleChangeSearchValue}
+          required
+        />
+        <button
+          type="submit"
+          className="search-form__btn hovered-item"
+          onClick={handleClickSearch}
+        >
+          <img
+            alt="иконка поиска"
+            src={invertedSearchIcon}
+            className="search-form__img"
+          />
         </button>
       </form>
-      <div className="searchForm__toggle-container">
-        <label className="searchForm__switch" >
-          <input type="checkbox" value={filters.isShorts} onClick={handleChangeToggleBtn} />
-          <span className="searchForm__slider"></span>
+      <div className="search-form__toggle-container">
+        <label className="search-form__switch">
+          <input
+            type="checkbox"
+            checked={isShorts}
+            onChange={handleChangeToggleBtn}
+          />
+          <span className="search-form__slider"></span>
         </label>
-        <p className="searchForm__filter-title">Короткометражки</p>
+        <p className="search-form__filter-title">Короткометражки</p>
       </div>
     </div>
-  )
+  );
 }
 
 export default SearchForm;

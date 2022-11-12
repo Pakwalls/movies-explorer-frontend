@@ -8,6 +8,9 @@
   left: 50%;
   bottom: 60px;
   transform: translate(-50%, 0);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,4 +1,4 @@
-.searchForm__input {
+.search-form__input {
   padding:  0;
   font-weight: 500;
   font-size: 28px;
@@ -10,7 +10,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  .searchForm__input {
+  .search-form__input {
     font-size: 18px;
     line-height: 22px;
     width: calc(100% - 80px);

@@ -1,7 +1,8 @@
-.movies-card__duration {
+  .movies-card__duration {
   margin: 0;
   padding: 0;
   font-size: 13px;
   line-height: 18px;
   color: #A0A0A0;
+  white-space: nowrap;
 }
