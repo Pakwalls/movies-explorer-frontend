@@ -13,6 +13,11 @@
   background-color: #fff;
 }
 
+.profile__input:focus {
+  outline: none;
+  background-color: #bde4cf;
+}
+
 @media screen and (max-width: 500px) {
   .profile__input {
     width: 260px;

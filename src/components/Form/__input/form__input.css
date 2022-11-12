@@ -8,3 +8,8 @@
   box-sizing: border-box;
   border-radius: 8px;
 }
+
+.form__input:focus {
+  outline: none;
+  background-color: #bde4cf;
+}

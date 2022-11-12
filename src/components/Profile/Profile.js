@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useSyncExternalStore } from "react";
+import { useContext, useEffect, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import {
   EMAIL_ERR_MESSAGE,
@@ -13,7 +13,6 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useEmailValidation } from "../../utils/useEmailValidatation";
 
 function Profile({ handleLogOut, onUpdateUser }) {
-  // const [btnText, setBtnText] = useState(NAME_BTN_EDIT);
   const [isTouched, setIsTouched] = useState(false);
   const currentUser = useContext(CurrentUserContext);
   const [isEqualFormData, setIsEqualFormData] = useState(true);
@@ -80,6 +79,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
 
   useEffect(() => {
     if (isTouched) {
+      // currentUser берется из контекста
       setIsEqualFormData(isEqual(formData, currentUser));
     }
   }, [formData, isTouched, currentUser]);
@@ -88,9 +88,6 @@ function Profile({ handleLogOut, onUpdateUser }) {
     setFormData(currentUser);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
-  // useEffect(() => {
-  //   setBtnText(isEqualFormData ? NAME_BTN_EDIT : NAME_BTN_SAVE);
-  // }, [isEqualFormData]);
 
   return (
     <section className="profile">
@@ -139,15 +136,6 @@ function Profile({ handleLogOut, onUpdateUser }) {
           {NAME_BTN_EDIT}
         </button>
       )}
-      {/* <button
-        className={`${
-          !isEqualFormData ? "profile__save-btn" : "profile__confirm-btn"
-        }`}
-        disabled={error || isLoading}
-        onClick={handleSubmitForm}
-      >
-        {btnText}
-      </button> */}
       <button
         className={`profile__exit-btn ${
           isEdit ? "profile__exit-btn_disabled" : ""

@@ -70,7 +70,6 @@ function App() {
       return createUser(data)
         .then((res) => {
           handleAuthorization(data);
-          history.push("/signin");
           handleClearError();
         })
         .catch((err) => {
@@ -170,6 +169,7 @@ function App() {
                 apiError={apiError}
                 onRegister={handleRegistration}
                 isLoading={isLoading}
+                loggedIn={isLoggedIn}
               />
             </Route>
 
@@ -179,6 +179,7 @@ function App() {
                 apiError={apiError}
                 onLogin={handleAuthorization}
                 isLoading={isLoading}
+                loggedIn={isLoggedIn}
               />
             </Route>
 

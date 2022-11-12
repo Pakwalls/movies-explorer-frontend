@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { EMAIL_ERR_MESSAGE } from "../../utils/constants";
 import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Login({ onLogin, apiError, handleClearError, isLoading }) {
+function Login({ onLogin, apiError, handleClearError, isLoading, loggedIn }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -54,26 +54,36 @@ function Login({ onLogin, apiError, handleClearError, isLoading }) {
   };
 
   return (
-    <section className="form">
-      <Logo className="logo logo_type_aligned" />
-      <h2 className="form__title">Рады видеть!</h2>
-      <Form
-        formData={formData}
-        btnText="Войти"
-        errors={errors}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        apiError={apiError}
-        isLoading={isLoading}
-        isLogin
-      />
-      <p className="form__question">
-        Ещё не зарегистрированы?{" "}
-        <Link to="/signup" className="form__link" onClick={handleClearError}>
-          Регистрация
-        </Link>
-      </p>
-    </section>
+    <>
+      {loggedIn ? (
+        <Redirect to={"/"} />
+      ) : (
+        <section className="form">
+          <Logo className="logo logo_type_aligned" />
+          <h2 className="form__title">Рады видеть!</h2>
+          <Form
+            formData={formData}
+            btnText="Войти"
+            errors={errors}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            apiError={apiError}
+            isLoading={isLoading}
+            isLogin
+          />
+          <p className="form__question">
+            Ещё не зарегистрированы?{" "}
+            <Link
+              to="/signup"
+              className="form__link"
+              onClick={handleClearError}
+            >
+              Регистрация
+            </Link>
+          </p>
+        </section>
+      )}
+    </>
   );
 }
 

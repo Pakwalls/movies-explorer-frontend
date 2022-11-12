@@ -10,7 +10,7 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
-// import { checkSavedMovies } from "../../utils/checkSavedMovies";
+import { checkSavedMovies } from "../../utils/checkSavedMovies";
 
 function SavedMovies({ handleLogOut }) {
   const localMovies = getLocalStorageValue("savedMovies");
@@ -39,21 +39,10 @@ function SavedMovies({ handleLogOut }) {
           );
           saveSavedMoviesToStorage(userCards);
           const allMovies = getLocalStorageValue("movies");
-          const newAllMovies = allMovies.map((movie) => {
-            const isHaveSavedCard = userCards.findIndex(
-              (userCard) => movie.movieId === userCard.movieId,
-            );
-            const newCard = {
-              ...movie,
-              saved: isHaveSavedCard !== -1,
-            };
-
-            if (isHaveSavedCard !== -1 && userCards[isHaveSavedCard]._id) {
-              newCard._id = userCards[isHaveSavedCard]._id;
-            }
-            return newCard;
-          });
-          saveMoviesToStorage(newAllMovies);
+          if (!!allMovies) {
+            const newAllMovies = checkSavedMovies();
+            saveMoviesToStorage(newAllMovies);
+          }
         })
         .catch((err) => console.error(err.message))
         .finally(() => setIsLoading(false));
@@ -84,6 +73,15 @@ function SavedMovies({ handleLogOut }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, isLoading]);
 
+  useEffect(() => {
+    if (!!localMovies) {
+      setCards(localMovies);
+    } else {
+      handleChangeFilters(filters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleChangeCard = (cardData) => {
     if (!localStorage.getItem("jwt")) {
       handleLogOut();
@@ -92,24 +90,13 @@ function SavedMovies({ handleLogOut }) {
     const changedCardIndex = cards.findIndex(
       (card) => card._id === cardData._id,
     );
+
     const allMovies = getLocalStorageValue("movies");
-    const userCards = getLocalStorageValue("savedMovies");
-    const newAllMovies = allMovies.map((movie) => {
-      const isHaveSavedCard = userCards.findIndex(
-        (userCard) => movie.movieId === userCard.movieId,
-      );
-      const newCard = {
-        ...movie,
-        saved: isHaveSavedCard !== -1,
-      };
+    if (!!allMovies) {
+      const newAllMovies = checkSavedMovies();
+      saveMoviesToStorage(newAllMovies);
+    }
 
-      if (isHaveSavedCard !== -1 && userCards[isHaveSavedCard]._id) {
-        newCard._id = userCards[isHaveSavedCard]._id;
-      }
-      return newCard;
-    });
-
-    saveMoviesToStorage(newAllMovies);
     const newCards = cards.slice();
     if (changedCardIndex !== -1) {
       newCards.splice(changedCardIndex, 1);

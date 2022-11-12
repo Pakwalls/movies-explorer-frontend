@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { EMAIL_ERR_MESSAGE } from "../../utils/constants";
 import { useEmailValidation } from "../../utils/useEmailValidatation";
 import Form from "../Form/Form";
 import Logo from "../Logo/Logo.js";
 
-function Register({ onRegister, apiError, handleClearError, isLoading }) {
+function Register({
+  onRegister,
+  apiError,
+  handleClearError,
+  isLoading,
+  loggedIn,
+}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -56,25 +62,35 @@ function Register({ onRegister, apiError, handleClearError, isLoading }) {
   };
 
   return (
-    <section className="form">
-      <Logo className="logo logo_type_aligned" />
-      <h2 className="form__title">Добро пожаловать!</h2>
-      <Form
-        formData={formData}
-        btnText="Зарегестрироваться"
-        errors={errors}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        apiError={apiError}
-        isLoading={isLoading}
-      />
-      <p className="form__question">
-        Уже зарегистрированы?{" "}
-        <Link to="/signin" className="form__link" onClick={handleClearError}>
-          Войти
-        </Link>
-      </p>
-    </section>
+    <>
+      {loggedIn ? (
+        <Redirect to={"/"} />
+      ) : (
+        <section className="form">
+          <Logo className="logo logo_type_aligned" />
+          <h2 className="form__title">Добро пожаловать!</h2>
+          <Form
+            formData={formData}
+            btnText="Зарегестрироваться"
+            errors={errors}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            apiError={apiError}
+            isLoading={isLoading}
+          />
+          <p className="form__question">
+            Уже зарегистрированы?{" "}
+            <Link
+              to="/signin"
+              className="form__link"
+              onClick={handleClearError}
+            >
+              Войти
+            </Link>
+          </p>
+        </section>
+      )}
+    </>
   );
 }
 

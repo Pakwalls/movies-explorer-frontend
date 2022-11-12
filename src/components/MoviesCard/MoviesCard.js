@@ -103,11 +103,9 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
 
   useEffect(() => {
     if (isTouched) {
-      console.log(isSavedMovie);
       if (isSavedMovie || isSavedPage) {
         deleteAction();
       } else {
-        console.log("save");
         addAction();
       }
     }
