@@ -1,6 +1,6 @@
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Preloader from "../Preloader/Preloader";
 import {
   FILTER_ERR_MESSAGE,
@@ -15,15 +15,20 @@ import {
   saveMoviesToStorage,
   getLocalStorageValue,
   saveMoviesFilter,
+  saveSavedMoviesToStorage,
 } from "../../utils/localStorageHandlers";
 import { loadNextIems } from "../../utils/pagginator";
 import { useListenWindowSize } from "../../utils/windowSizeHandlers";
 import { setAppSizing } from "../../utils/appSizeHandler";
+import { checkSavedMovies } from "../../utils/checkSavedMovies";
+import { getSavedMovies } from "../../utils/MainApi";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Movies({ handleLogOut }) {
   const localMovies = getLocalStorageValue("movies");
   const localFilters = getLocalStorageValue("moviesFilter");
   const appSize = useListenWindowSize();
+  const { _id: currentUserId } = useContext(CurrentUserContext);
 
   const [filters, setFilters] = useState(
     localFilters
@@ -66,6 +71,15 @@ function Movies({ handleLogOut }) {
           setError("");
 
           saveMoviesToStorage(data);
+          return getSavedMovies();
+        })
+        .then((data) => {
+          const userCards = data.filter(
+            ({ owner }) => owner && owner === currentUserId,
+          );
+          saveSavedMoviesToStorage(userCards);
+          const newData = checkSavedMovies();
+          saveMoviesToStorage(newData);
         })
         .catch((err) => {
           setError(FILTER_ERR_MESSAGE);

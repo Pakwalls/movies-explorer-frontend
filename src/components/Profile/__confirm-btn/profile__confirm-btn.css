@@ -1,8 +1,13 @@
 .profile__confirm-btn {
-  margin: 0 0 14px 0;
-  font-size: 13px;
-  line-height: 16px;
-  border: none;
-  background-color: #fff;
-  cursor: pointer;
+  height: 45px;
+  width: 100%;
+  border: 0;
+  color: #fff;
+  background-color: #2BE080;
+  border-radius: 3px;
+}
+
+
+.profile__confirm-btn:disabled {
+  background-color: #F8F8F8;
 }

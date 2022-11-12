@@ -53,17 +53,15 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
           const allMoviesCardIndex = allMovies.findIndex(
             (movie) => movie.movieId === newData.movieId,
           );
-          savedMovies.splice(allMoviesCardIndex, 1, newData);
-          saveMoviesToStorage(savedMovies);
+          allMovies.splice(allMoviesCardIndex, 1, newData);
+          saveMoviesToStorage(allMovies);
         }
 
         handleChangeCard(newData);
       })
       .catch((err) => {
-        handleLogOut();
         if (err.status === 401) {
-          localStorage.clear();
-          history.push("/");
+          handleLogOut();
         }
         console.error(err.message);
       })
@@ -73,6 +71,8 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
   const addAction = () => {
     delete cardData["saved"];
     delete cardData["owner"];
+    delete cardData["_id"];
+    delete cardData["__v"];
 
     createMovieCard(cardData)
       .then((data) => {
@@ -82,21 +82,19 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
         if (savedMovies) {
           savedMovies.push(newData);
           saveSavedMoviesToStorage(savedMovies);
-        } else {
-          const allMovies = getLocalStorageValue("movies");
-          const allMoviesCardIndex = allMovies.findIndex(
-            (movie) => movie.movieId === newData.movieId,
-          );
-          savedMovies.splice(allMoviesCardIndex, 1, newData);
-          saveMoviesToStorage(savedMovies);
         }
+        const allMovies = getLocalStorageValue("movies");
+        const allMoviesCardIndex = allMovies.findIndex(
+          (movie) => movie.movieId === newData.movieId,
+        );
+        allMovies.splice(allMoviesCardIndex, 1, newData);
+        saveMoviesToStorage(allMovies);
+
         handleChangeCard(newData);
       })
       .catch((err) => {
-        handleLogOut();
         if (err.status === 401) {
-          localStorage.clear();
-          history.push("/");
+          handleLogOut();
         }
         console.error(err.message);
       })
@@ -105,9 +103,11 @@ function MoviesCard({ cardData, isSavedPage, handleChangeCard, handleLogOut }) {
 
   useEffect(() => {
     if (isTouched) {
+      console.log(isSavedMovie);
       if (isSavedMovie || isSavedPage) {
         deleteAction();
       } else {
+        console.log("save");
         addAction();
       }
     }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useSyncExternalStore } from "react";
 import { isEqual } from "../../utils/isEqual";
 import {
   EMAIL_ERR_MESSAGE,
@@ -13,13 +13,14 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { useEmailValidation } from "../../utils/useEmailValidatation";
 
 function Profile({ handleLogOut, onUpdateUser }) {
-  const [btnText, setBtnText] = useState(NAME_BTN_EDIT);
+  // const [btnText, setBtnText] = useState(NAME_BTN_EDIT);
   const [isTouched, setIsTouched] = useState(false);
   const currentUser = useContext(CurrentUserContext);
   const [isEqualFormData, setIsEqualFormData] = useState(true);
-  const [formData, setFormData] = useState(currentUser);
+  const [formData, setFormData] = useState(useContext(CurrentUserContext));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const isEmailValid = useEmailValidation(formData.email);
 
@@ -50,6 +51,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
             closeOnClick: true,
             theme: "colored",
           });
+          setIsEdit(false);
         })
         .catch((err) => {
           if (err.status === 409) {
@@ -62,6 +64,11 @@ function Profile({ handleLogOut, onUpdateUser }) {
           setIsLoading(false);
         });
     }
+  };
+
+  const handleEditForm = () => {
+    setIsEdit(true);
+    setIsTouched(true);
   };
 
   useEffect(() => {
@@ -78,13 +85,17 @@ function Profile({ handleLogOut, onUpdateUser }) {
   }, [formData, isTouched, currentUser]);
 
   useEffect(() => {
-    setBtnText(isEqualFormData ? NAME_BTN_EDIT : NAME_BTN_SAVE);
-  }, [isEqualFormData]);
+    setFormData(currentUser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
+  // useEffect(() => {
+  //   setBtnText(isEqualFormData ? NAME_BTN_EDIT : NAME_BTN_SAVE);
+  // }, [isEqualFormData]);
 
   return (
     <section className="profile">
       <h2 className="profile__title">Привет, {currentUser.name}!</h2>
-      <form className="profile__form">
+      <form className="profile__form" onSubmit={handleSubmitForm}>
         <div className="profile__row">
           <label className="profile__label">Имя</label>
           <input
@@ -95,6 +106,7 @@ function Profile({ handleLogOut, onUpdateUser }) {
             name="name"
             minLength="2"
             maxLength="30"
+            disabled={!isEdit}
             required
           />
         </div>
@@ -106,23 +118,39 @@ function Profile({ handleLogOut, onUpdateUser }) {
             type="email"
             className="profile__input"
             name="email"
+            disabled={!isEdit}
             required
           />
         </div>
       </form>
       <span className="input-error">{error}</span>
-      <button
+
+      {isEdit ? (
+        <button
+          type="submit"
+          className="profile__confirm-btn"
+          onClick={handleSubmitForm}
+          disabled={error || isLoading || isEqualFormData}
+        >
+          {NAME_BTN_SAVE}
+        </button>
+      ) : (
+        <button className="profile__edit-btn" onClick={handleEditForm}>
+          {NAME_BTN_EDIT}
+        </button>
+      )}
+      {/* <button
         className={`${
-          !isEqualFormData ? "profile__save-btn" : "profile__confirm-btn "
+          !isEqualFormData ? "profile__save-btn" : "profile__confirm-btn"
         }`}
         disabled={error || isLoading}
         onClick={handleSubmitForm}
       >
         {btnText}
-      </button>
+      </button> */}
       <button
         className={`profile__exit-btn ${
-          !isEqualFormData ? "profile__exit-btn_disabled" : ""
+          isEdit ? "profile__exit-btn_disabled" : ""
         }`}
         onClick={handleLogOut}
       >

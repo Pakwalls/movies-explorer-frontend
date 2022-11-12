@@ -51,7 +51,6 @@ function Register({ onRegister, apiError, handleClearError, isLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isLoading) {
-      console.log(123);
       onRegister(formData);
     }
   };

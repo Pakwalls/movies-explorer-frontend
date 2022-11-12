@@ -10,6 +10,7 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
+// import { checkSavedMovies } from "../../utils/checkSavedMovies";
 
 function SavedMovies({ handleLogOut }) {
   const localMovies = getLocalStorageValue("savedMovies");

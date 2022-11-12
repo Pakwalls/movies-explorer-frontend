@@ -70,7 +70,7 @@ function Form({
           required
         />
         <span className="form__error">{errors.password}</span>
-        <span className="input-error">{apiError}</span>
+        <span className="form__input-error">{apiError}</span>
       </fieldset>
       <button
         type="submit"

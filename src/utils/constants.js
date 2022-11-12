@@ -21,6 +21,8 @@ export const NAME_BTN_SAVE = "Сохранить";
 export const NAME_BTN_EDIT = "Редактировать";
 export const NAME_MSG_SUCCESS = "Сохранено!";
 
+export const SEACH_ERROR = "Нужно ввести ключевое слово";
+
 export const ERRORS = {
   LOGIN: {
     INVALID_DATA_ERROR: "Вы ввели неправильный логин или пароль.",

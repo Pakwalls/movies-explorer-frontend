@@ -35,6 +35,7 @@
 @import url('./components/Form/__submit-button/_disabled/form__submit-button_disabled.css');
 @import url('./components/Form/__question/form__question.css');
 @import url('./components/Form/__link/form__link.css');
+@import url('./components/Form/__input-error/form__input-error.css');
 
 @import url('./components/Promo/promo.css');
 @import url('./components/Promo/__logo/promo__logo.css');
@@ -93,7 +94,7 @@
 @import url('./components/Profile/__row/profile__row.css');
 @import url('./components/Profile/__input/profile__input.css');
 @import url('./components/Profile/__title/profile__title.css');
-@import url('./components/Profile/__save-btn/profile__save-btn.css');
+@import url('./components/Profile/__edit-btn/profile__edit-btn.css');
 
 @import url('./components/Movies/movies.css');
 @import url('./components/Movies/__load-container/movies__load-container.css');
